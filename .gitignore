@@ -1,13 +1,42 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
+# Created by http://gitignore.io
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
+### Node ###
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
+pids
+logs
+results
+
+npm-debug.log
+node_modules
+
+### Bower ###
+app/bower_components
+
+
+### Linux ###
+.*
+!.gitignore
+!.git*
+!.editorconfig
+!.jshintrc
+!.npmignore
+!.travis.yml
+*~
+
+
+### SASS ###
+### SASS Ignores - "Sassy CSS" http://sass-lang.com/
+*.sass-cache
+
+
+### Yeoman ###
+dist
+test/temp
