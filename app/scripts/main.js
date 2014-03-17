@@ -25,6 +25,7 @@ require.config({
         backbone: "../bower_components/backbone/backbone",
         underscore: "../bower_components/underscore/underscore",
         markdown: "../bower_components/markdown/lib/markdown",
+        mousetrap: "../bower_components/mousetrap/mousetrap",
         text: "../bower_components/requirejs-text/text",
         handlebars: "../bower_components/handlebars/handlebars",
         bootstrap: "../bower_components/bootstrap/bootstrap"
