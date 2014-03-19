@@ -15,10 +15,37 @@ define(function(require) {
 
     initialize: function() {
       Mousetrap.bind('mod+s', _.bind(this.save, this));
+      Mousetrap.bind('mod+b', _.bind(this.boldText, this));
+      Mousetrap.bind('mod+l', _.bind(this.linkText, this));
     },
 
     events: {
       "click button[name='preview']": "preview"
+    },
+
+    replaceText: function(sStartTag, sEndTag) {
+      var bDouble = arguments.length > 1,
+        oMsgInput = this.$("textarea")[0],
+        nSelStart = oMsgInput.selectionStart,
+        nSelEnd = oMsgInput.selectionEnd,
+        sOldText = oMsgInput.value;
+      oMsgInput.value = sOldText.substring(0, nSelStart) +
+        (bDouble ? sStartTag + sOldText.substring(nSelStart, nSelEnd) +
+        sEndTag : sStartTag) + sOldText.substring(nSelEnd);
+      oMsgInput.setSelectionRange(bDouble || nSelStart === nSelEnd ?
+        nSelStart + sStartTag.length :
+        nSelStart, (bDouble ? nSelEnd : nSelStart) + sStartTag.length);
+      oMsgInput.focus();
+    },
+
+    boldText: function(e) {
+      e.preventDefault();
+      this.replaceText("**", "**");
+    },
+
+    linkText: function(e) {
+      e.preventDefault();
+      console.log("linking text");
     },
 
     preview: function() {
