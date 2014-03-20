@@ -15,6 +15,7 @@ define(function(require) {
 
     initialize: function() {
       Mousetrap.bind('mod+s', _.bind(this.save, this));
+      Mousetrap.bind('mod+c', _.bind(this.formatCode, this));
       Mousetrap.bind('mod+b', _.bind(this.boldText, this));
       Mousetrap.bind('mod+l', _.bind(this.linkText, this));
     },
@@ -28,14 +29,27 @@ define(function(require) {
         oMsgInput = this.$("textarea")[0],
         nSelStart = oMsgInput.selectionStart,
         nSelEnd = oMsgInput.selectionEnd,
-        sOldText = oMsgInput.value;
+        sOldText = oMsgInput.value,
+        sHighlightedText = sOldText.substring(nSelStart, nSelEnd);
+      // Add corresponding spaces
+      if (sStartTag === "    ") {
+        sStartTag = "";
+        sHighlightedText = sHighlightedText.split("\n").map(function(line) {
+          return "    " + line;
+        }).join("\n");
+      }
       oMsgInput.value = sOldText.substring(0, nSelStart) +
-        (bDouble ? sStartTag + sOldText.substring(nSelStart, nSelEnd) +
-        sEndTag : sStartTag) + sOldText.substring(nSelEnd);
+        (bDouble ? sStartTag + sHighlightedText +
+        sEndTag : sStartTag + sHighlightedText) + sOldText.substring(nSelEnd);
       oMsgInput.setSelectionRange(bDouble || nSelStart === nSelEnd ?
         nSelStart + sStartTag.length :
         nSelStart, (bDouble ? nSelEnd : nSelStart) + sStartTag.length);
       oMsgInput.focus();
+    },
+
+    formatCode: function(e) {
+      e.preventDefault();
+      this.replaceText("    ");
     },
 
     boldText: function(e) {
