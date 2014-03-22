@@ -25,7 +25,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(this.template(this.model.attributes));
+      this.$el.html(this.template());
       var a = new fileModel({title: "Helllllo there one :)"});
       var b = new fileModel({title: "Helllllo there two :)"});
       var list = new fileList([a,b]);

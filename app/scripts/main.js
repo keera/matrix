@@ -48,7 +48,7 @@ require([
     "bootstrap"
 ], function (Backbone, fileModel, editorView, dashboardView, bootstrap) {
 
-    (new dashboardView({model: newFile})).render();
+    (new dashboardView()).render();
     Backbone.history.start();
     console.log("Hello from Backbone!");
 
