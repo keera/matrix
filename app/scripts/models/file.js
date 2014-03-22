@@ -5,6 +5,8 @@ define([
     defaults: {
       title: "untitled",
       content: "nothing to see here!",
+      created: "",
+      modified: "",
       labels: []
     }
   });

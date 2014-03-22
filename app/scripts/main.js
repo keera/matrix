@@ -44,10 +44,11 @@ require([
     "backbone",
     "models/file",
     "views/editor",
+    "views/dashboard",
     "bootstrap"
-], function (Backbone, fileModel, editorView, bootstrap) {
-    var newFile = new fileModel({content: "Helllllo there :)"});
-    (new editorView({model: newFile})).render();
+], function (Backbone, fileModel, editorView, dashboardView, bootstrap) {
+
+    (new dashboardView({model: newFile})).render();
     Backbone.history.start();
     console.log("Hello from Backbone!");
 

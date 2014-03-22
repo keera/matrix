@@ -36,3 +36,10 @@ body {
 #editing-preview {
   display: none;
 }
+
+/* dashboard */
+
+.main .page-header {
+      margin-top: 0;
+  }
+
