@@ -58,7 +58,8 @@ define(function(require) {
     },
 
     events: {
-      "click button[name='preview']": "preview"
+      "click button[name='preview']": "preview",
+      "click #urlModal button": "hideModal",
     },
 
     replaceText: function(sStartTag, sEndTag) {
@@ -94,9 +95,18 @@ define(function(require) {
       this.replaceText("**", "**");
     },
 
+    hideModal: function(e) {
+      this.$('#urlModal').modal('hide');
+    },
+
     linkText: function(e) {
       e.preventDefault();
-      console.log("linking text");
+      var that = this;
+      this.$('#urlModal')
+        .modal('show')
+        .one('hidden.bs.modal', function (e) {
+        that.replaceText("[","](" + that.$("#url").val() + ")");
+      });
     },
 
     preview: function() {
