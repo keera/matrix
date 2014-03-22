@@ -62,32 +62,30 @@ define(function(require) {
       "click #urlModal button": "hideModal",
     },
 
-    replaceText: function(sStartTag, sEndTag) {
-      var bDouble = arguments.length > 1,
-        oMsgInput = this.$("textarea")[0],
+    replaceText: function(sStartTag, sEndTag, cb) {
+      var oMsgInput = this.$("textarea")[0],
         nSelStart = oMsgInput.selectionStart,
         nSelEnd = oMsgInput.selectionEnd,
         sOldText = oMsgInput.value,
         sHighlightedText = sOldText.substring(nSelStart, nSelEnd);
-      // Add corresponding spaces
-      if (sStartTag === "    ") {
-        sStartTag = "";
-        sHighlightedText = sHighlightedText.split("\n").map(function(line) {
-          return "    " + line;
-        }).join("\n");
+      if (cb) {
+        sHighlightedText = cb(sHighlightedText);
       }
       oMsgInput.value = sOldText.substring(0, nSelStart) +
-        (bDouble ? sStartTag + sHighlightedText +
-        sEndTag : sStartTag + sHighlightedText) + sOldText.substring(nSelEnd);
-      oMsgInput.setSelectionRange(bDouble || nSelStart === nSelEnd ?
-        nSelStart + sStartTag.length :
-        nSelStart, (bDouble ? nSelEnd : nSelStart) + sStartTag.length);
+        sStartTag + sHighlightedText + sEndTag +
+        sOldText.substring(nSelEnd);
+      oMsgInput.setSelectionRange(nSelStart + sStartTag.length,
+        nSelEnd + sStartTag.length);
       oMsgInput.focus();
     },
 
     formatCode: function(e) {
       e.preventDefault();
-      this.replaceText("    ");
+      this.replaceText("", "", function(text) {
+        return text.split("\n").map(function(line) {
+          return "    " + line;
+        }).join("\n");
+      });
     },
 
     boldText: function(e) {
