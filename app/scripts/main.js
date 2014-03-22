@@ -18,7 +18,14 @@ require.config({
         },
         markdown: {
           exports: "markdown"
-        }
+        },
+        modal: {
+          deps: ["jquery"]
+        },
+        select2: {
+          deps: ["jquery"],
+          exports: "Select2"
+        },
     },
     paths: {
         jquery: "../bower_components/jquery/jquery",
@@ -28,17 +35,20 @@ require.config({
         mousetrap: "../bower_components/mousetrap/mousetrap",
         text: "../bower_components/requirejs-text/text",
         handlebars: "../bower_components/handlebars/handlebars",
-        bootstrap: "../bower_components/bootstrap/bootstrap"
+        modal: "../bower_components/bootstrap/js/modal",
+        select2: "../bower_components/select2/select2"
     }
 });
 
 require([
     "backbone",
     "models/file",
-    "views/editor"
-], function (Backbone, fileModel, editorView) {
+    "views/editor",
+    "modal"
+], function (Backbone, fileModel, editorView, modal) {
     var newFile = new fileModel({content: "Helllllo there :)"});
     (new editorView({model: newFile})).render();
     Backbone.history.start();
     console.log("Hello from Backbone!");
+
 });
