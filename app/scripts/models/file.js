@@ -3,7 +3,9 @@ define([
 ], function(Backbone) {
   var File = Backbone.Model.extend({
     defaults: {
-      content: "nothing to see here!"
+      title: "untitled",
+      content: "nothing to see here!",
+      labels: []
     }
   });
 

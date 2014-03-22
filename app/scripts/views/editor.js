@@ -24,9 +24,9 @@ define(function(require) {
 
     postInitialize: function() {
       var preload_data = [
-        {id: 'user0', text: 'Disabled User', locked: true},
-        {id: 'user1', text: 'Jane Doe'},
-        {id: 'user7', text: 'Inigo Montoya' }
+        {id: 2, text: 'algorithms'},
+        {id: 3, text: 'interviews'},
+        {id: 4, text: 'career'}
       ];
       this.$('#labels').select2({
         width: "copy",
@@ -58,8 +58,9 @@ define(function(require) {
     },
 
     events: {
-      "click button[name='preview']": "preview",
-      "click #urlModal button": "hideModal",
+      "click ul a.show-preview": "preview",
+      "click ul a.hide-preview": "hidePreview",
+      "click #urlModal button": "hideModal"
     },
 
     replaceText: function(sStartTag, sEndTag, cb) {
@@ -111,13 +112,29 @@ define(function(require) {
       var previewEl = this.$("#editing-preview");
       var textareaEl = this.$("textarea");
       previewEl.html(Markdown.toHTML(textareaEl.val()));
+      previewEl.show();
+    },
+
+    hidePreview: function() {
+      this.$("#editing-preview").hide();
     },
 
     save: function(e) {
       e.preventDefault();
-      // get tag data
-      console.log(this.$("#labels").val());
+      var labelsEl = this.$("#labels");
+      var textareaEl = this.$("textarea");
+      var titleEl = this.$("#title");
+
+      var labels = labelsEl.val();
+      var content = textareaEl.val();
+      var title = titleEl.val();
+      var attr = {
+        title: title,
+        content: content,
+        labels: labels.split(",")
+      };
       console.log("Saving");
+      console.log(attr);
     },
 
     render: function() {

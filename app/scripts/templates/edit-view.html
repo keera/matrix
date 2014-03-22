@@ -1,9 +1,20 @@
 <div id="editing">
-    <div id="options-panel">
-        <button name="preview">Preview</button>
+    <ul class="nav nav-tabs">
+        <li><a class="show-preview" href="#">Preview</a></li>
+        <li><a class="hide-preview" href="#">Hide Preview</a></li>
+    </ul>
+    <div class="input-group">
+        <span class="input-group-addon">Title</span>
+        <input type="text" id="title" class="form-control" placeholder="Untitled">
     </div>
-    <textarea class="mousetrap" rows="15" cols="30">{{content}}</textarea>
-    <div id="editing-preview">
+    <div class="row">
+        <div class="col-lg-6">
+            <textarea class="mousetrap form-control">{{content}}</textarea>
+        </div>
+        <div class="col-lg-6">
+        <div id="editing-preview">
+        </div>
+        </div>
     </div>
     <input type="hidden" style="width: 300px;" id="labels"/>
     <div id="urlModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
