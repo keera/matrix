@@ -127,12 +127,12 @@ define(function(require) {
       var previewContentEl = previewEl.find(".panel-body");
       var textareaEl = this.$("textarea");
       previewContentEl.html(Markdown.toHTML(textareaEl.val()));
-      previewEl.show(400);
+      previewEl.slideDown(400);
     },
 
     closePreview: function() {
       this.previewOn = false;
-      this.$("#editing-preview").hide(400);
+      this.$("#editing-preview").slideUp(400);
     },
 
     save: function(e) {
