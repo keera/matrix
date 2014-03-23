@@ -37,17 +37,31 @@
                 </div>
                 <div class="collapse navbar-collapse">
                   <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
                     <li><a href="#about">About</a></li>
-                    <li><a class="new-file">New file</a></li>
+                    <li><a class="new-file">New File</a></li>
+                    <li><a class="new-label">New Label</a></li>
                   </ul>
                 </div><!--/.nav-collapse -->
               </div>
         </div>
-            <div class="container">
-                <div id="content">
+        <div class="container">
+            <div id="content">
+            </div>
+        </div>
+        <div id="new-label-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="input-group">
+                        <span class="input-group-addon">Name</span>
+                        <input type="text" class="form-control" placeholder="awesome label">
+                    </div>
+                    <div class="input-group-lg">
+                        <textarea class="form-control"></textarea>
+                    </div>
+                    <button type="button" class="btn btn-success btn-block">Create Label</button>
                 </div>
             </div>
+        </div>
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
             (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=

@@ -33,6 +33,10 @@ body {
   padding-top: 50px;
 }
 
+#new-label-modal textarea {
+    min-height: 100px;
+}
+
 #editing {
     margin-bottom: 50px;
 }
@@ -40,7 +44,7 @@ body {
   display: none;
 }
 
-textarea {
+#editing textarea {
   min-height: 500px;
 }
 
@@ -48,5 +52,5 @@ textarea {
 
 .main .page-header {
       margin-top: 0;
-  }
+}
 
