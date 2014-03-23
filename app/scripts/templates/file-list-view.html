@@ -4,18 +4,17 @@
 <table class="table table-striped">
 <thead>
 <tr>
-  <th>ID</th>
   <th>Title</th>
   <th>Date created</th>
   <th>Last modified</th>
   <th>Labels</th>
+  <th>Published</th>
   <th>Options</th>
 </tr>
 </thead>
 <tbody>
 {{#each files}}
 <tr>
-    <td>{{id}}</td>
     <td>{{title}}</td>
     <td>{{created}}</td>
     <td>{{modified}}</td>
@@ -24,10 +23,9 @@
         <span class="label label-primary">psychology</span>
         <span class="label label-primary">war</span>
         <span class="label label-primary">technology</span>
-        <span class="label label-primary">politics</span>
-        <span class="label label-primary">personal</span>
     </td>
-    <td>Edit or View</td>
+    <td><span class="label label-success">Yes</span></td>
+    <td><a class="edit-file">Edit</a> or <a class="view-file">View</a></td>
 </tr>
 {{/each}}
 </tbody>
