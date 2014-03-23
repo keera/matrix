@@ -64,8 +64,8 @@ define(function(require) {
     },
 
     events: {
-      "click ul a.show-preview": "openPreview",
-      "click ul a.hide-preview": "closePreview",
+      "click a.show-preview": "openPreview",
+      "click a.hide-preview": "closePreview",
       "click #urlModal button": "hideModal",
       "keyup textarea": "preview",
       "click #save": "save"
@@ -124,14 +124,15 @@ define(function(require) {
     preview: function() {
       if (!this.previewOn) return;
       var previewEl = this.$("#editing-preview");
+      var previewContentEl = previewEl.find(".panel-body");
       var textareaEl = this.$("textarea");
-      previewEl.html(Markdown.toHTML(textareaEl.val()));
-      previewEl.show();
+      previewContentEl.html(Markdown.toHTML(textareaEl.val()));
+      previewEl.show(400);
     },
 
     closePreview: function() {
       this.previewOn = false;
-      this.$("#editing-preview").hide();
+      this.$("#editing-preview").hide(400);
     },
 
     save: function(e) {
