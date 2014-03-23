@@ -7,6 +7,7 @@ define([
       content: "nothing to see here!",
       created: "today",
       modified: "2 days ago",
+      published: false,
       labels: []
     }
   });
