@@ -33,8 +33,15 @@ body {
   padding-top: 50px;
 }
 
+#editing {
+    margin-bottom: 50px;
+}
 #editing-preview {
   display: none;
+}
+
+textarea {
+  min-height: 500px;
 }
 
 /* dashboard */
