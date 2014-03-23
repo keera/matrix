@@ -60,7 +60,9 @@ define(function(require) {
     events: {
       "click ul a.show-preview": "preview",
       "click ul a.hide-preview": "hidePreview",
-      "click #urlModal button": "hideModal"
+      "click #urlModal button": "hideModal",
+      "keyup textarea": "preview",
+      "click #save": "save"
     },
 
     replaceText: function(sStartTag, sEndTag, cb) {
@@ -109,6 +111,7 @@ define(function(require) {
     },
 
     preview: function() {
+      console.log("previewing");
       var previewEl = this.$("#editing-preview");
       var textareaEl = this.$("textarea");
       previewEl.html(Markdown.toHTML(textareaEl.val()));

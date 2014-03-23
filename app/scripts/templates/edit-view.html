@@ -1,16 +1,19 @@
 <div id="editing">
     <ul class="nav nav-tabs">
-        <li><a class="show-preview" href="#">Preview</a></li>
-        <li><a class="hide-preview" href="#">Hide Preview</a></li>
+        <li><a class="show-preview">Preview</a></li>
+        <li><a class="hide-preview">Hide Preview</a></li>
     </ul>
-    <div class="input-group">
-        <span class="input-group-addon">Title</span>
-        <input type="text" id="title" class="form-control" placeholder="Untitled">
-    </div>
     <div class="row">
         <div class="col-lg-6">
+            <div class="input-group">
+                <span class="input-group-addon">Title</span>
+                <input type="text" id="title" class="form-control" placeholder="Untitled">
+            </div>
             <textarea class="mousetrap form-control">{{content}}</textarea>
-            <input type="hidden" style="width: 300px;" id="labels"/>
+            <div class="row">
+                <div class="col-lg-8"><input type="hidden" style="width: 100%;" id="labels"/></div>
+                <div class="col-lg-4"><button type="button" id="save" class="btn btn-success btn-block">Save</button></div>
+            </div>
         </div>
         <div class="col-lg-6">
         <div id="editing-preview">

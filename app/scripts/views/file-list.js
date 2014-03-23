@@ -11,16 +11,13 @@ define(function(require) {
 
     template: Handlebars.compile(filelistTemplate),
 
-    initialize: function() {
-    },
-
-    events: {
-    },
-
     render: function() {
-      this.$el.html(this.template({files: this.collection.models.map(function(model) {
-        return model.attributes;
-      })}));
+      var models = this.collection.models;
+      this.$el.html(this.template({
+        files: _.map(models, function(model) {
+          return model.attributes;
+        })
+      }));
       return this;
     }
   });
