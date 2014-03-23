@@ -28,8 +28,21 @@ define(function(require) {
       "click #dashboard-sidebar a": "updateFilelist"
     },
 
+    updateActiveLink: function(newLink) {
+      var currLabelEl = this.$(".nav li.active");
+      currLabelEl.removeClass("active");
+      console.log(currLabelEl);
+      newLink.addClass("active");
+    },
+
     updateFilelist: function(e) {
       console.log("Updating file list");
+      var headerLabelEl = this.$("#header-label");
+      var currLinkEl = this.$(e.target);
+      this.updateActiveLink(currLinkEl.parent());
+      headerLabelEl.html(currLinkEl.html());
+      // go iterative through
+      // turn everyone except target off
       // Get the name, use it to search for the ID in
       // labels
       // set the url and fetch

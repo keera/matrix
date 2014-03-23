@@ -5,8 +5,8 @@ define([
     defaults: {
       title: "untitled",
       content: "nothing to see here!",
-      created: "",
-      modified: "",
+      created: "today",
+      modified: "2 days ago",
       labels: []
     }
   });

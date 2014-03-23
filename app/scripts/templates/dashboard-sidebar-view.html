@@ -1,5 +1,10 @@
 <h2 class="sub-header">Labels</h2>
-<ul class="nav nav-sidebar">
+<div class="input-group">
+      <span class="input-group-addon">Label</span>
+        <input type="text" class="form-control" placeholder="Life">
+    </div>
+<ul class="nav nav-pills nav-stacked">
+    <li class="active"><a href="#">All</a></li>
     {{#each labels}}
         <li><a href="#">{{name}}</a></li>
     {{/each}}

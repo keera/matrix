@@ -1,5 +1,6 @@
-<h2 class="sub-header">Files</h2>
+<h2 class="sub-header">Files <small id="header-label">All</small></h2>
 <div class="table-responsive">
+    <input id="file-search" type="hidden" class="form-control" placeholder="Knuth Morris Pratt">
 <table class="table table-striped">
 <thead>
 <tr>
@@ -8,15 +9,25 @@
   <th>Date created</th>
   <th>Last modified</th>
   <th>Labels</th>
+  <th>Options</th>
 </tr>
 </thead>
 <tbody>
 {{#each files}}
 <tr>
+    <td>{{id}}</td>
     <td>{{title}}</td>
     <td>{{created}}</td>
     <td>{{modified}}</td>
-    <td>{{labels}}</td>
+    <td>
+        <span class="label label-primary">careers</span>
+        <span class="label label-primary">psychology</span>
+        <span class="label label-primary">war</span>
+        <span class="label label-primary">technology</span>
+        <span class="label label-primary">politics</span>
+        <span class="label label-primary">personal</span>
+    </td>
+    <td>Edit or View</td>
 </tr>
 {{/each}}
 </tbody>
