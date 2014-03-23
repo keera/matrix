@@ -3,10 +3,9 @@
 define(function(require) {
   var Backbone = require("backbone");
   var _ = require("underscore");
-  var dashboardView = require("views/dashboard");
 
-  var App = Backbone.View.extend({
-    el: "#app",
+  var Header = Backbone.View.extend({
+    el: "#main-nav",
 
     initialize: function() {
     },
@@ -21,11 +20,10 @@ define(function(require) {
     },
 
     render: function() {
-      (new dashboardView()).render();
       return this;
     }
   });
 
-  return App;
+  return Header;
 });
 

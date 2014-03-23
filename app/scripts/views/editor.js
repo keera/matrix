@@ -20,6 +20,7 @@ define(function(require) {
       Mousetrap.bind('mod+c', _.bind(this.formatCode, this));
       Mousetrap.bind('mod+b', _.bind(this.boldText, this));
       Mousetrap.bind('mod+l', _.bind(this.linkText, this));
+      this.previewOn = false;
     },
 
     postInitialize: function() {
@@ -58,8 +59,8 @@ define(function(require) {
     },
 
     events: {
-      "click ul a.show-preview": "preview",
-      "click ul a.hide-preview": "hidePreview",
+      "click ul a.show-preview": "openPreview",
+      "click ul a.hide-preview": "closePreview",
       "click #urlModal button": "hideModal",
       "keyup textarea": "preview",
       "click #save": "save"
@@ -110,15 +111,21 @@ define(function(require) {
       });
     },
 
+    openPreview: function() {
+      this.previewOn = true;
+      this.preview();
+    },
+
     preview: function() {
-      console.log("previewing");
+      if (!this.previewOn) return;
       var previewEl = this.$("#editing-preview");
       var textareaEl = this.$("textarea");
       previewEl.html(Markdown.toHTML(textareaEl.val()));
       previewEl.show();
     },
 
-    hidePreview: function() {
+    closePreview: function() {
+      this.previewOn = false;
       this.$("#editing-preview").hide();
     },
 

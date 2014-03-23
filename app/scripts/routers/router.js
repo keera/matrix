@@ -2,11 +2,12 @@
 
 define([
   "backbone",
-  "views/app",
+  "views/header",
   "models/file",
   "views/editor",
-  "views/file"
-], function(Backbone, appView, fileModel, editorView, fileView) {
+  "views/file",
+  "views/dashboard"
+], function(Backbone, headerView, fileModel, editorView, fileView, dashboardView) {
   var appRouter = Backbone.Router.extend({
     routes: {
       "": "main",
@@ -15,15 +16,18 @@ define([
     },
 
     main: function() {
-      (new appView()).render();
+      new headerView();
+      (new dashboardView()).render();
     },
 
     view: function() {
+      new headerView();
       var m = new fileModel({title:"Hello World", content: "this is what I'm taling about"});
       (new fileView({model: m}).render());
     },
 
     edit: function(id) {
+      new headerView();
       var m = new fileModel({title:"supppp", content: "f"});
       (new editorView({model: m}).render());
     }
