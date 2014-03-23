@@ -3,6 +3,7 @@
 define(function(require) {
   var Backbone = require("backbone");
   var _ = require("underscore");
+  var dashboardView = require("views/dashboard");
 
   var App = Backbone.View.extend({
     el: "#app",
@@ -16,11 +17,11 @@ define(function(require) {
 
     newFile: function() {
       // Create new file on server
-      // On success, navigate to edit page with correct url
-      console.log("Creating a new file");
+      window.open("#file/5/edit", "_blank");
     },
 
     render: function() {
+      (new dashboardView()).render();
       return this;
     }
   });

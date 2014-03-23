@@ -42,13 +42,10 @@ require.config({
 
 require([
     "backbone",
-    "models/file",
-    "views/editor",
-    "views/dashboard",
-    "bootstrap"
-], function (Backbone, fileModel, editorView, dashboardView, bootstrap) {
-
-    (new dashboardView()).render();
+    "routers/router",
+    "bootstrap",
+], function (Backbone, router, bootstrap) {
+    new router();
     Backbone.history.start();
     console.log("Hello from Backbone!");
 
