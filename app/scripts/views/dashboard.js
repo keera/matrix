@@ -21,9 +21,6 @@ define(function(require) {
 
     template: Handlebars.compile(dashboardTemplate),
 
-    initialize: function() {
-    },
-
     events: {
       "click #dashboard-sidebar a": "updateFilelist"
     },
@@ -51,19 +48,8 @@ define(function(require) {
 
     render: function() {
       this.$el.html(this.template());
-      // Test models
-      var a = new fileModel({title: "Helllllo there one :)"});
-      var b = new fileModel({title: "Helllllo there two :)"});
-      var list = new fileList([a,b]);
-      var newList = new fileListView({collection: list});
-      newList.render();
-
-      var al = new labelModel({name: "algorithms"});
-      var bl = new labelModel({name: "history"});
-      var listl = new labelList([al,bl]);
-      var newListl = new labelListView({collection: listl});
-
-      newListl.render();
+      (new fileListView({collection: (new fileList())})).render();
+      (new labelListView({collection: (new labelList())})).render();
       return this;
     }
   });

@@ -12,6 +12,11 @@ define(function(require) {
 
     template: Handlebars.compile(filelistTemplate),
 
+    initialize: function() {
+      this.listenTo(this.collection, 'reset', this.render);
+      this.collection.fetch({reset: true});
+    },
+
     postInit: function() {
       var data=[{id:0,tag:'enhancement'},
         {id:1,tag:'Knuth Morris Pratt'},

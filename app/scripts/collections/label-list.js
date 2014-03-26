@@ -3,7 +3,8 @@ define([
   "models/label"
 ], function(Backbone, labelModel) {
   var Labellist = Backbone.Collection.extend({
-    model: labelModel
+    model: labelModel,
+    url: "/api/labels"
   });
 
   return Labellist;

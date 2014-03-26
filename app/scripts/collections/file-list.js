@@ -3,7 +3,8 @@ define([
   "models/file"
 ], function(Backbone, fileModel) {
   var Filelist = Backbone.Collection.extend({
-    model: fileModel
+    model: fileModel,
+    url: "/api/files"
   });
 
   return Filelist;

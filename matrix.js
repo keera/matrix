@@ -16,7 +16,23 @@ app.post('/api/files', function(req, res) {
 
 // Query files
 app.get('/api/files', function(req, res) {
-  res.send(200, "Query file");
+  var file1 = {
+      title: "First restful get",
+      content: "nothing to see here!",
+      created: "yesterday",
+      modified: "today",
+      published: false,
+      labels: []
+    };
+  var file2 = {
+      title: "The tao that can be named is not the eternal tao",
+      content: "nothing to see here!",
+      created: "4 days ago",
+      modified: "yesterday",
+      published: false,
+      labels: []
+    };
+  res.json(200, [file1, file2]);
 });
 
 // Get file
@@ -41,7 +57,16 @@ app.post('/api/labels', function(req, res) {
 
 // Query labels
 app.get('/api/labels', function(req, res) {
-  res.send(200, "Query labels");
+  res.json(200, [
+    {
+      name: "algorithms",
+      description: ""
+    },
+    {
+      name: "restful",
+      description: ""
+    }
+  ]);
 });
 
 app.listen(app.get('port'));
