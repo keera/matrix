@@ -11,45 +11,63 @@ app.get('/', function(req, res) {
 
 // Create file
 app.post('/api/files', function(req, res) {
-  res.send(200, "Create file");
-});
-
-// Query files
-app.get('/api/files', function(req, res) {
-  var file1 = {
-      id: 1,
-      title: "First restful get",
-      content: "nothing to see here!",
-      created: "yesterday",
-      modified: "today",
-      published: false,
-      labels: []
-    };
-  var file2 = {
-      id: 2,
-      title: "First restful get",
-      title: "The tao that can be named is not the eternal tao",
-      content: "nothing to see here!",
+  var newFile = {
+      id: 3,
+      title: "Untitled",
+      content: "",
       created: "4 days ago",
       modified: "yesterday",
       published: false,
       labels: []
     };
+  res.json(200, newFile);
+});
+
+// Query files
+app.get('/api/files', function(req, res) {
+  var file1 = {
+    id: 1,
+    title: "First restful get",
+    content: "nothing to see here!",
+    created: "yesterday",
+    modified: "today",
+    published: false,
+    labels: []
+  };
+  var file2 = {
+    id: 2,
+    title: "First restful get",
+    title: "The tao that can be named is not the eternal tao",
+    content: "nothing to see here!",
+    created: "4 days ago",
+    modified: "yesterday",
+    published: false,
+    labels: []
+  };
   res.json(200, [file1, file2]);
 });
 
 // Get file
-app.get('/api/file/:id', function(req, res) {
-  res.send(200, "Get file");
+app.get('/api/files/:id', function(req, res) {
+  var newFile = {
+    id: 3,
+    title: "Untitled new file",
+    content: "",
+    created: "4 days ago",
+    modified: "yesterday",
+    published: false,
+    labels: []
+  };
+  res.json(200, newFile);
 });
 
 // Update file
-app.put('/api/file/:id', function(req, res) {
+app.put('/api/files/:id', function(req, res) {
   res.send(200, "Update file");
 });
 
 // Delete file
-app.del('/api/file/:id', function(req, res) {
+app.del('/api/files/:id', function(req, res) {
   res.send(200, "Delete file");
 });
 

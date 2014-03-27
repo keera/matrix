@@ -28,7 +28,7 @@ define([
 
     edit: function(id) {
       new headerView();
-      var m = new fileModel({title:"supppp", content: "f"});
+      var m = new fileModel({id: id});
       (new editorView({model: m}).render());
     }
   });

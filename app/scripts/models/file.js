@@ -9,7 +9,8 @@ define([
       modified: "2 days ago",
       published: false,
       labels: []
-    }
+    },
+    urlRoot: "/api/files",
   });
 
   return File;

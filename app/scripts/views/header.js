@@ -4,6 +4,7 @@ define(function(require) {
   var Backbone = require("backbone");
   var _ = require("underscore");
   var $ = require("jquery");
+  var fileModel = require("models/file");
 
   var Header = Backbone.View.extend({
     el: "#main-nav",
@@ -18,8 +19,13 @@ define(function(require) {
     },
 
     newFile: function() {
-      // Create new file on server
-      window.open("#file/5/edit", "_blank");
+      var file = new fileModel();
+      file.save({},{
+        success: function(model, response, options) {
+          var modelId = model.get("id");
+          window.open("#file/" + modelId + "/edit", "_blank");
+        }
+      });
     },
 
     updateNav: function(current) {

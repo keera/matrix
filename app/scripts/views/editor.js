@@ -20,6 +20,8 @@ define(function(require) {
       Mousetrap.bind('mod+c', _.bind(this.formatCode, this));
       Mousetrap.bind('mod+b', _.bind(this.boldText, this));
       Mousetrap.bind('mod+l', _.bind(this.linkText, this));
+      this.listenTo(this.model, "change", this.render);
+      this.model.fetch();
       this.previewOn = false;
     },
 
@@ -149,8 +151,7 @@ define(function(require) {
         content: content,
         labels: labels.split(",")
       };
-      console.log("Saving");
-      console.log(attr);
+      this.model.save(attr);
     },
 
     render: function() {
