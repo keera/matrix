@@ -17,6 +17,7 @@ app.post('/api/files', function(req, res) {
 // Query files
 app.get('/api/files', function(req, res) {
   var file1 = {
+      id: 1,
       title: "First restful get",
       content: "nothing to see here!",
       created: "yesterday",
@@ -25,6 +26,8 @@ app.get('/api/files', function(req, res) {
       labels: []
     };
   var file2 = {
+      id: 2,
+      title: "First restful get",
       title: "The tao that can be named is not the eternal tao",
       content: "nothing to see here!",
       created: "4 days ago",
