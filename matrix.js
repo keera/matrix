@@ -80,10 +80,12 @@ app.post('/api/labels', function(req, res) {
 app.get('/api/labels', function(req, res) {
   res.json(200, [
     {
+      id: 1,
       name: "algorithms",
       description: ""
     },
     {
+      id: 2,
       name: "restful",
       description: ""
     }

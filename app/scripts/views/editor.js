@@ -26,33 +26,31 @@ define(function(require) {
     },
 
     postInitialize: function() {
+      var format = function(item) {
+        return item.name;
+      };
       this.$('#labels').select2({
         width: "copy",
         ajax: {
-          url: "http://api",
+          url: "api/labels",
           dataType: "json",
           data: function(term, page) {
-            return {
-              q: term
-            }
+            return {q: term}
+          },
+          results: function(data, page) {
+            return {results: data, text:"name"};
           }
         },
-        results: function(data, page) {
-            return {results: term};
-        },
         multiple: true,
+        formatResult: format,
+        formatSelection: format
       });
-      var format = function(item) {
-        return item.tag;
-      };
       this.$("#url").select2({
         ajax: {
           url: "http://api",
           dataType: "json",
           data: function(term, page) {
-            return {
-              q: term
-            }
+            return {q: term}
           },
           results: function(term, page) {
             return {results: term};
