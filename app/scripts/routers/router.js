@@ -4,12 +4,14 @@ define([
   "backbone",
   "views/header",
   "models/file",
+  "models/session",
   "views/editor",
   "views/file",
   "views/dashboard",
   "views/about"
 ], function(Backbone, headerView, fileModel,
-  editorView, fileView, dashboardView, aboutView) {
+  session, editorView, fileView,
+  dashboardView, aboutView) {
   var appRouter = Backbone.Router.extend({
     routes: {
       "": "main",
@@ -20,7 +22,11 @@ define([
 
     main: function() {
       // Check authentication
-      window.location.hash = "about";
+      if (!session.getSession().isAuthenticated()) {
+        this.navigate("about");
+        this.about();
+        return;
+      }
       (new headerView()).render();
       (new dashboardView()).render();
     },
