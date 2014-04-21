@@ -4,6 +4,7 @@ define(function(require) {
   var Backbone = require("backbone");
   var Handlebars = require("handlebars");
   var aboutTemplate = require("text!templates/about-view.html");
+  var session = require("models/session").getSession();
 
   var About = Backbone.View.extend({
     el: "#content",

@@ -6,6 +6,7 @@ define(function(require) {
   var $ = require("jquery");
   var Handlebars = require("handlebars");
   var fileModel = require("models/file");
+  var session = require("models/session").getSession();
   var headerTemplate = require("text!templates/nav-view.html");
 
   var Header = Backbone.View.extend({
@@ -52,7 +53,9 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(this.template());
+      this.$el.html(this.template({
+        isAuthenticated: session.isAuthenticated()
+      }));
       return this;
     }
   });
