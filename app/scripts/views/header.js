@@ -4,13 +4,14 @@ define(function(require) {
   var Backbone = require("backbone");
   var _ = require("underscore");
   var $ = require("jquery");
+  var Handlebars = require("handlebars");
   var fileModel = require("models/file");
+  var headerTemplate = require("text!templates/nav-view.html");
 
   var Header = Backbone.View.extend({
     el: "#main-nav",
 
-    initialize: function() {
-    },
+    template: Handlebars.compile(headerTemplate),
 
     events: {
       "click .new-file": "newFile",
@@ -51,6 +52,7 @@ define(function(require) {
     },
 
     render: function() {
+      this.$el.html(this.template());
       return this;
     }
   });
