@@ -1,18 +1,45 @@
 define([
-  "backbone"
-], function(Backbone) {
+  "backbone",
+  "jquery"
+], function(Backbone, $) {
   var currSession = null;
   var Session = Backbone.Model.extend({
+
+    // Authen user
+    authenticate: function(cb) {
+      $.ajax("http://localhost:3000/api/authen", {
+          success: function() {
+            cb.success();
+          },
+          error: function() {
+            cb.failure();
+          }
+        }
+      );
+    },
 
     isAuthenticated: function(cb) {
       return false;
     },
 
-    login: function() {
-      console.log("Logging in");
+    login: function(username, password, cb) {
+      $.ajax("http://localhost:3000/api/login", {
+          type: "POST",
+          data: {
+            username: username,
+            password: password
+          },
+          success: function() {
+            cb.success();
+          },
+          error: function() {
+            cb.failure();
+          }
+        }
+      );
     },
 
-    logout: function() {
+    logout: function(cb) {
       console.log("Logging out");
     }
 

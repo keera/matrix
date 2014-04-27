@@ -22,13 +22,19 @@ define([
 
     main: function() {
       // Check authentication
-      if (!session.getSession().isAuthenticated()) {
+      var success = function() {
+        (new headerView()).render();
+        (new dashboardView()).render();
+      };
+      var failure = function() {
         this.navigate("about");
         this.about();
         return;
-      }
-      (new headerView()).render();
-      (new dashboardView()).render();
+      }.bind(this);
+      session.getSession().authenticate({
+        success: success,
+        failure: failure
+      });
     },
 
     view: function() {

@@ -1,12 +1,52 @@
 var express = require('express');
+var cookieParser = require('cookie-parser');
+var session = require("express-session");
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
 app.use(express.bodyParser());
+app.use(cookieParser());
+app.use(session({secret: 'gggunit', key: 'sid', cookie: {maxAge: 60000}}));
 app.use(express.static(__dirname + '/app'));
 
+var datastore = {
+  username: 'testuser',
+  password: 'testpassword'
+};
 app.get('/', function(req, res) {
   res.status(200).sendfile('index.html');
+});
+
+// User authentication
+app.get('/api/authen', function(req, res) {
+  if (req.session.authenticated) {
+    res.json(200, {success: 'win'});
+    return;
+  }
+  res.json(404, {error: 'fail'});
+});
+
+app.post('/api/login', function(req, res) {
+  if (req.session.authenticated) {
+    res.json(200, {success: 'win'});
+    return;
+  }
+  var username = req.body.username;
+  var password = req.body.password;
+  console.log("logging in: ");
+  console.log(req.body);
+  if (username == datastore.username &&
+    password == datastore.password) {
+    req.session.authenticated = true;
+    res.json(200, {success: 'win'});
+    return;
+  }
+  res.json(404, {error: 'sorry'});
+});
+
+app.post('/api/logout', function(req, res) {
+  req.session.destroy();
+  res.json(200, {success: 'destroyed'});
 });
 
 // Create file
