@@ -10,11 +10,14 @@
 </div>
 {{#if isAuthenticated}}
     <div class="collapse navbar-collapse">
-      <ul class="nav navbar-nav">
-        <li><a class="about" href="#about">About</a></li>
-        <li><button type="button" class="btn btn-primary navbar-btn new-file">New file</button></li>
-        <li><button type="button" class="btn btn-primary navbar-btn new-label">New label</button></li>
-      </ul>
+        <ul class="nav navbar-nav">
+            <li><a class="about" href="#about">About</a></li>
+            <li><button type="button" class="btn btn-primary navbar-btn new-file">New file</button></li>
+            <li><button type="button" class="btn btn-primary navbar-btn new-label">New label</button></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a class="logout" href="#">Logout</a></li>
+        </ul>
     </div><!--/.nav-collapse -->
 {{/if}}
 </div>

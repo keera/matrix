@@ -13,7 +13,23 @@ define(function(require) {
 
     events: {
       "click #dashboard-sidebar a": "updateFilelist",
-      "click #login-modal button": "login"
+      "click #login-modal button": "login",
+      "click #signup-modal .signup": "signup"
+    },
+
+    signup: function() {
+      console.log("hello");
+      var username = this.$('#signup-modal .username').val();
+      var password = this.$('#signup-modal .password').val();
+      var options = {
+        success: function() {
+          window.location = "http://localhost:3000";
+        },
+        failure: function() {
+          alert("Failed signup");
+        }
+      };
+      session.signup(username, password, options);
     },
 
     login: function() {
@@ -21,7 +37,7 @@ define(function(require) {
       var password = this.$('#login-modal .password').val();
       var options = {
         success: function() {
-          alert("logged in");
+          window.location = "http://localhost:3000";
         },
         failure: function() {
           alert("failed login");

@@ -5,10 +5,29 @@ define([
   var currSession = null;
   var Session = Backbone.Model.extend({
 
+    isLoggedin: false,
+
+    signup: function(username, password, cb) {
+      $.ajax("http://localhost:3000/api/signup", {
+        type: "POST",
+        data: {
+          username: username,
+          password: password
+        },
+        success: function() {
+          cb.success();
+        },
+        error: function() {
+          cb.failure();
+        }
+      });
+    },
     // Authen user
     authenticate: function(cb) {
+      var that = this;
       $.ajax("http://localhost:3000/api/authen", {
           success: function() {
+            that.isLoggedin = true;
             cb.success();
           },
           error: function() {
@@ -19,7 +38,7 @@ define([
     },
 
     isAuthenticated: function(cb) {
-      return false;
+      return this.isLoggedin;
     },
 
     login: function(username, password, cb) {
@@ -40,9 +59,17 @@ define([
     },
 
     logout: function(cb) {
-      console.log("Logging out");
+      $.ajax("http://localhost:3000/api/logout", {
+          type: "POST",
+          success: function() {
+            cb.success();
+          },
+          error: function() {
+            cb.failure();
+          }
+        }
+      );
     }
-
   });
 
   return {

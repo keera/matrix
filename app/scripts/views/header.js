@@ -17,7 +17,8 @@ define(function(require) {
     events: {
       "click .new-file": "newFile",
       "click .new-label": "newLabel",
-      "click .about": "updateAbout"
+      "click .about": "updateAbout",
+      "click .logout": "logout"
     },
 
     newFile: function() {
@@ -50,6 +51,18 @@ define(function(require) {
     createLabel: function() {
       // Grab info, validate
       // save and close modal
+    },
+
+    logout: function() {
+      session.logout({
+        success: function() {
+          alert("Goodbye!");
+          window.location = "http://localhost:3000";
+        },
+        failure: function() {
+          alert("failed to logout");
+        }
+      });
     },
 
     render: function() {

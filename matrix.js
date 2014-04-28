@@ -1,23 +1,47 @@
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var session = require("express-session");
+var mysql = require('mysql');
 var app = express();
 
+var connection = mysql.createConnection({
+  host: 'localhost',
+  database: 'matrix',
+  user: 'root',
+  password: 'root'
+});
 app.set('port', process.env.PORT || 3000);
 app.use(express.bodyParser());
 app.use(cookieParser());
-app.use(session({secret: 'gggunit', key: 'sid', cookie: {maxAge: 60000}}));
+app.use(session({secret: 'gggunit', key: 'sid'}));
 app.use(express.static(__dirname + '/app'));
 
 var datastore = {
   username: 'testuser',
   password: 'testpassword'
 };
+
 app.get('/', function(req, res) {
   res.status(200).sendfile('index.html');
 });
 
 // User authentication
+app.post('/api/signup', function(req, res) {
+  var username = req.body.username;
+  var password = req.body.password;
+  connection.query('INSERT INTO user SET ?', {
+    username: username,
+    password: password
+  }, function(err, result) {
+    if (err) {
+      res.json(404, {error: 'fail'});
+      return;
+    }
+    req.session.authenticated = true;
+    res.json(200, {success: 'win'});
+  });
+});
+
 app.get('/api/authen', function(req, res) {
   if (req.session.authenticated) {
     res.json(200, {success: 'win'});
