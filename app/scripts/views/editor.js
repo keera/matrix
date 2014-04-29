@@ -36,6 +36,7 @@ define(function(require) {
           url: "api/labels",
           dataType: "json",
           data: function(term, page) {
+            console.log(term);
             return {q: term}
           },
           results: function(data, page) {
@@ -142,16 +143,39 @@ define(function(require) {
       var labelsEl = this.$("#labels");
       var textareaEl = this.$("textarea");
       var titleEl = this.$("#title");
-
-      var labels = labelsEl.val();
+      var labels = labelsEl.val().split(",").filter(function(val) {
+        return val != '';
+      }).map(function(val) {
+        return +val;
+      });
       var content = textareaEl.val();
       var title = titleEl.val();
+      var originalKeys = _.map(this.model.get('labels'), function(val) {
+        return +val.id;
+      });
+      var addedKeys = _.filter(labels, function(val) {
+        return originalKeys.indexOf(val) < 0;
+      });
+      var deletedKeys = _.filter(originalKeys, function(val) {
+        return labels.indexOf(val) < 0;
+      });
+      var newLabels = this.$('#labels').select2('data');
       var attr = {
         title: title,
         content: content,
-        labels: labels.split(",")
+        labels: newLabels,
+        add_labels: addedKeys,
+        delete_labels: deletedKeys
       };
-      this.model.save(attr);
+      this.model.save(attr, {
+        wait: true,
+        success: function(model) {
+          alert('win');
+        },
+        error: function(model) {
+          alert('failed my brotha');
+        }
+      });
     },
 
     render: function() {

@@ -1,6 +1,7 @@
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var session = require("express-session");
+var async = require("async");
 var mysql = require('mysql');
 var app = express();
 
@@ -90,10 +91,12 @@ app.post('/api/files', function(req, res) {
       published: false,
       labels: []
     };*/
+
   if (!req.session.authenticated) {
       res.json(404, {error: 'fail'});
       return;
   }
+  console.log("creating another file?");
   connection.query('INSERT INTO file SET ?, date_created = NOW()', {
     title: "Untitled",
     user_id: req.session.user_id
@@ -168,7 +171,87 @@ app.get('/api/files/:id', function(req, res) {
 
 // Update file
 app.put('/api/files/:id', function(req, res) {
-  res.send(200, "Update file");
+  if (!req.session.authenticated) {
+      res.json(404, {error: 'fail'});
+      return;
+  }
+
+  var fileId = req.body.id;
+  var title = req.body.title;
+  var content = req.body.content;
+  var addLabels = req.body.add_labels;
+  var deleteLabels = req.body.delete_labels;
+
+  connection.beginTransaction(function(err) {
+    if (err) {
+      throw err;
+    }
+    // Update the file
+    var sql = 'UPDATE file SET ? , date_modified = NOW() WHERE ? AND ?';
+    connection.query(sql, [{
+      title: title,
+      content: content,
+    }, {
+      id: fileId
+    }, {
+      user_id: req.session.user_id
+    }], function(err, result) {
+      if (err) {
+        connection.rollback(function() {
+          throw err;
+        });
+      }
+      // Update labels
+      async.parallel([
+        // Add labels
+        function(callback) {
+          // If nothing to add
+          if (!addLabels.length) {
+            callback(null, false);
+            return;
+          }
+          var bulkInsertData = addLabels.map(function(val) {
+            return [fileId, val];
+          });
+          var sql = 'INSERT INTO file_label (file_id, label_id) VALUES ?';
+          connection.query(sql, [bulkInsertData], function(err, result) {
+            if (err) {
+              connection.rollback(function() {
+                throw err;
+              });
+            }
+            callback(null, true);
+          });
+        },
+        // Delete labels
+        function(callback) {
+          if (!deleteLabels.length) {
+            callback(null, false);
+            return;
+          }
+          var sql = "DELETE FROM file_label WHERE file_id = ? AND label_id IN ?";
+          var lol = connection.query(sql, [fileId, [deleteLabels]], function(err, result) {
+            if (err) {
+              connection.rollback(function() {
+                throw err;
+              });
+            }
+            callback(null, true);
+          });
+        }
+      ], function(err, results) {
+        console.log(results);
+        connection.commit(function(err) {
+          if (err) {
+            connection.rollback(function() {
+              throw err;
+            });
+          }
+          res.json(200, {success: 'win'});
+        });
+      });
+    });
+  });
 });
 
 // Delete file
@@ -204,8 +287,9 @@ app.get('/api/labels', function(req, res) {
       return;
   }
   var sql = 'SELECT id, title AS name, description' +
-    ' FROM label WHERE user_id = ?';
-  connection.query(sql, [req.session.user_id], function(err, rows) {
+    ' FROM label WHERE user_id = ? AND title LIKE ? LIMIT 5';
+  connection.query(sql, [req.session.user_id, "%" + req.query.q + "%"],
+    function(err, rows) {
     if (err) {
       res.json(404, {error: 'fail'});
       return;
