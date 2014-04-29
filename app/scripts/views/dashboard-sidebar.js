@@ -1,12 +1,14 @@
 "use strict";
 
-define(function(require) {
-  var Backbone = require("backbone");
-  var _ = require("underscore");
-  var Handlebars = require("handlebars");
-  var dashboardsidebarTemplate = require("text!templates/dashboard-sidebar-view.html");
+define([
+  "backbone",
+  "underscore",
+  "handlebars",
+  "text!templates/dashboard-sidebar-view.html"
+], function(Backbone, _, Handlebars, dashboardsidebarTemplate) {
 
   var Dashboardsidebar = Backbone.View.extend({
+
     el: "#dashboard-sidebar",
 
     template: Handlebars.compile(dashboardsidebarTemplate),
@@ -20,7 +22,6 @@ define(function(require) {
       var models = this.collection.models;
       this.$el.html(this.template({
         labels: _.map(models, function(model) {
-          console.log(model.attributes);
           return model.attributes;
         })
       }));

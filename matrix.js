@@ -286,6 +286,9 @@ app.get('/api/labels', function(req, res) {
       res.json(404, {error: 'fail'});
       return;
   }
+  if (!req.query.q) {
+    req.query.q = "";
+  }
   var sql = 'SELECT id, title AS name, description' +
     ' FROM label WHERE user_id = ? AND title LIKE ? LIMIT 5';
   connection.query(sql, [req.session.user_id, "%" + req.query.q + "%"],
