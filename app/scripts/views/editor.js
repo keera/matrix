@@ -8,9 +8,11 @@ define([
   "mousetrap",
   "select2",
   "jquery",
+  "collections/label-list",
   "text!templates/edit-view.html"
 ], function(Backbone, _, Handlebars, Markdown,
-  Mousetrap, Select2, $, editTemplate) {
+  Mousetrap, Select2, $, labelList,
+  editTemplate) {
 
   var Editor = Backbone.View.extend({
 
@@ -28,7 +30,22 @@ define([
       this.previewOn = false;
     },
 
+    events: {
+      "click a.show-preview": "openPreview",
+      "click a.hide-preview": "closePreview",
+      "click #urlModal button": "hideModal",
+      "keyup textarea": "preview",
+      "click #save": "save"
+    },
+
     postInitialize: function() {
+      this.setupLabelSearch();
+      this.setupFileSearch();
+      // select2 issue #1436
+      $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+    },
+
+    setupLabelSearch: function() {
       var format = function(item) {
         return item.name;
       };
@@ -39,7 +56,6 @@ define([
           url: "api/labels",
           dataType: "json",
           data: function(term, page) {
-            console.log(term);
             return {q: term}
           },
           results: function(data, page) {
@@ -51,6 +67,12 @@ define([
       });
       // Set existing labels
       this.$('#labels').select2('data', this.model.get('labels'));
+    },
+
+    setupFileSearch: function() {
+      var format = function(item) {
+        return item.name;
+      };
       this.$("#url").select2({
         ajax: {
           url: "http://api",
@@ -65,16 +87,6 @@ define([
         formatSelection: format,
         formatResult: format
       });
-      // select2 issue #1436
-      $.fn.modal.Constructor.prototype.enforceFocus = function() {};
-    },
-
-    events: {
-      "click a.show-preview": "openPreview",
-      "click a.hide-preview": "closePreview",
-      "click #urlModal button": "hideModal",
-      "keyup textarea": "preview",
-      "click #save": "save"
     },
 
     replaceText: function(sStartTag, sEndTag, cb) {
@@ -146,30 +158,21 @@ define([
       var labelsEl = this.$("#labels");
       var textareaEl = this.$("textarea");
       var titleEl = this.$("#title");
-      var labels = labelsEl.val().split(",").filter(function(val) {
-        return val != '';
-      }).map(function(val) {
-        return +val;
-      });
+
+      var newLabelIds = labelList.getIds(labelsEl.val().split(","));
+      var oldLabelIds = labelList.getIds(this.model.get('labels'));
       var content = textareaEl.val();
       var title = titleEl.val();
-      var originalKeys = _.map(this.model.get('labels'), function(val) {
-        return +val.id;
-      });
-      var addedKeys = _.filter(labels, function(val) {
-        return originalKeys.indexOf(val) < 0;
-      });
-      var deletedKeys = _.filter(originalKeys, function(val) {
-        return labels.indexOf(val) < 0;
-      });
       var newLabels = this.$('#labels').select2('data');
+
       var attr = {
         title: title,
         content: content,
         labels: newLabels,
-        add_labels: addedKeys,
-        delete_labels: deletedKeys
+        add_labels: labelList.getAdded(oldLabelIds, newLabelIds),
+        delete_labels: labelList.getDeleted(oldLabelIds, newLabelIds)
       };
+
       this.model.save(attr, {
         wait: true,
         success: function(model) {
