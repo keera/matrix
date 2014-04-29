@@ -1,12 +1,14 @@
 "use strict";
 
-define(function(require) {
-  var Backbone = require("backbone");
-  var _ = require("underscore");
-  var Handlebars = require("handlebars");
-  var fileTemplate = require("text!templates/file-view.html");
+define([
+  "backbone",
+  "underscore",
+  "handlebars",
+  "text!templates/file-view.html"
+], function(Backbone, _, Handlebars, fileTemplate) {
 
   var File = Backbone.View.extend({
+
     el: "#content",
 
     template: Handlebars.compile(fileTemplate),

@@ -1,16 +1,19 @@
 "use strict"
 
-define(function(require) {
-  var Backbone = require("backbone");
-  var _ = require("underscore");
-  var Handlebars = require("handlebars");
-  var Markdown = require("markdown");
-  var Mousetrap = require("mousetrap");
-  var Select2 = require("select2");
-  var $ = require("jquery");
-  var editTemplate = require("text!templates/edit-view.html");
+define([
+  "backbone",
+  "underscore",
+  "handlebars",
+  "markdown",
+  "mousetrap",
+  "select2",
+  "jquery",
+  "text!templates/edit-view.html"
+], function(Backbone, _, Handlebars, Markdown,
+  Mousetrap, Select2, $, editTemplate) {
 
   var Editor = Backbone.View.extend({
+
     el: "#content",
 
     template: Handlebars.compile(editTemplate),

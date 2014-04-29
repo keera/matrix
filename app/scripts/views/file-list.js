@@ -1,13 +1,16 @@
 "use strict";
 
-define(function(require) {
-  var Backbone = require("backbone");
-  var _ = require("underscore");
-  var Handlebars = require("handlebars");
-  var filelistTemplate = require("text!templates/file-list-view.html");
-  var Select2 = require('select2');
+define([
+  "backbone",
+  "underscore",
+  "handlebars",
+  "text!templates/file-list-view.html",
+  "select2"
+], function(Backbone, _, Handlebars, filelistTemplate,
+  Select2) {
 
   var Filelist = Backbone.View.extend({
+
     el: "#file-list",
 
     template: Handlebars.compile(filelistTemplate),

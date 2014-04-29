@@ -6,6 +6,7 @@ define([
   "text!templates/about-view.html",
   "models/session"
 ], function(Backbone, Handlebars, aboutTemplate, session) {
+
   session = session.getSession();
 
   var About = Backbone.View.extend({

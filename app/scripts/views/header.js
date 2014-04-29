@@ -1,16 +1,21 @@
 "use strict";
 
-define(function(require) {
-  var Backbone = require("backbone");
-  var _ = require("underscore");
-  var $ = require("jquery");
-  var Handlebars = require("handlebars");
-  var fileModel = require("models/file");
-  var labelModel = require("models/label");
-  var session = require("models/session").getSession();
-  var headerTemplate = require("text!templates/nav-view.html");
+define([
+  "backbone",
+  "underscore",
+  "jquery",
+  "handlebars",
+  "models/file",
+  "models/label",
+  "models/session",
+  "text!templates/nav-view.html"
+], function(Backbone, _, $, Handlebars,
+  fileModel, labelModel, session, headerTemplate) {
+
+  session = session.getSession();
 
   var Header = Backbone.View.extend({
+
     el: "#main-nav",
 
     template: Handlebars.compile(headerTemplate),
