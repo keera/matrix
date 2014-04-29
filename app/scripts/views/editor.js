@@ -30,6 +30,7 @@ define(function(require) {
         return item.name;
       };
       this.$('#labels').select2({
+        multiple: true,
         width: "copy",
         ajax: {
           url: "api/labels",
@@ -41,10 +42,11 @@ define(function(require) {
             return {results: data, text:"name"};
           }
         },
-        multiple: true,
         formatResult: format,
         formatSelection: format
       });
+      // Set existing labels
+      this.$('#labels').select2('data', this.model.get('labels'));
       this.$("#url").select2({
         ajax: {
           url: "http://api",

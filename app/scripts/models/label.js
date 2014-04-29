@@ -5,7 +5,9 @@ define([
     defaults: {
       name: "",
       description: ""
-    }
+    },
+
+    urlRoot: "/api/labels"
   });
 
   return Label;

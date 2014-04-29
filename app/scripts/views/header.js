@@ -6,6 +6,7 @@ define(function(require) {
   var $ = require("jquery");
   var Handlebars = require("handlebars");
   var fileModel = require("models/file");
+  var labelModel = require("models/label");
   var session = require("models/session").getSession();
   var headerTemplate = require("text!templates/nav-view.html");
 
@@ -17,13 +18,14 @@ define(function(require) {
     events: {
       "click .new-file": "newFile",
       "click .new-label": "newLabel",
+      "click #create-label": "createLabel",
       "click .about": "updateAbout",
       "click .logout": "logout"
     },
 
     newFile: function() {
       var file = new fileModel();
-      file.save({},{
+      file.save({}, {
         success: function(model, response, options) {
           var modelId = model.get("id");
           window.open("#file/" + modelId + "/edit", "_blank");
@@ -50,6 +52,21 @@ define(function(require) {
 
     createLabel: function() {
       // Grab info, validate
+      var title = $("#new-label-modal input[type=text]").val();
+      var description = $("#new-label-modal textarea").val();
+      var newLabel = new labelModel();
+      newLabel.save({
+        name: title,
+        description: description
+      }, {
+        success: function() {
+          alert("label saved");
+        },
+        error: function() {
+          alert("label not saved");
+        }
+      });
+      // $("#new-label-modal").modal("hide");
       // save and close modal
     },
 

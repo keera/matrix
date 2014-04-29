@@ -63,4 +63,8 @@ body {
 
 /* dashboard */
 
+/* prevent blocking modals located in navbar */
+.modal-backdrop {
+    z-index: 900;
+}
 

@@ -38,6 +38,7 @@ app.post('/api/signup', function(req, res) {
       return;
     }
     req.session.authenticated = true;
+    req.session.user_id = result.insertId;
     res.json(200, {success: 'win'});
   });
 });
@@ -57,15 +58,20 @@ app.post('/api/login', function(req, res) {
   }
   var username = req.body.username;
   var password = req.body.password;
-  console.log("logging in: ");
-  console.log(req.body);
-  if (username == datastore.username &&
-    password == datastore.password) {
+  connection.query('SELECT * FROM user WHERE ? AND ?',
+    [{
+      username: username
+    }, {
+      password: password
+    }], function(err, rows) {
+    if (err || !rows.length) {
+      res.json(404, {error: 'fail'});
+      return;
+    }
     req.session.authenticated = true;
+    req.session.user_id = rows[0].id;
     res.json(200, {success: 'win'});
-    return;
-  }
-  res.json(404, {error: 'sorry'});
+  });
 });
 
 app.post('/api/logout', function(req, res) {
@@ -75,7 +81,7 @@ app.post('/api/logout', function(req, res) {
 
 // Create file
 app.post('/api/files', function(req, res) {
-  var newFile = {
+  /*var newFile = {
       id: 3,
       title: "Untitled",
       content: "",
@@ -83,8 +89,21 @@ app.post('/api/files', function(req, res) {
       modified: "yesterday",
       published: false,
       labels: []
-    };
-  res.json(200, newFile);
+    };*/
+  if (!req.session.authenticated) {
+      res.json(404, {error: 'fail'});
+      return;
+  }
+  connection.query('INSERT INTO file SET ?, date_created = NOW()', {
+    title: "Untitled",
+    user_id: req.session.user_id
+  }, function(err, result) {
+    if (err) {
+      res.json(404, {error: 'fail'});
+      return;
+    }
+    res.json(200, {id: result.insertId});
+  });
 });
 
 // Query files
@@ -113,16 +132,38 @@ app.get('/api/files', function(req, res) {
 
 // Get file
 app.get('/api/files/:id', function(req, res) {
-  var newFile = {
-    id: 3,
-    title: "Untitled new file",
-    content: "",
-    created: "4 days ago",
-    modified: "yesterday",
-    published: false,
-    labels: []
-  };
-  res.json(200, newFile);
+  if (!req.session.authenticated) {
+      res.json(404, {error: 'fail'});
+      return;
+  }
+  // Get file by user
+  connection.query('SELECT * FROM file WHERE ? AND ?',
+    [{
+      id: req.params.id
+    }, {
+      user_id: req.session.user_id
+    }], function(err, rows) {
+    if (err || !rows.length) {
+      res.json(404, {error: 'fail'});
+      return;
+    }
+    var fileResult = rows[0];
+    // Get file labels
+    var sql = 'SELECT id, title AS name ' +
+      'FROM file_label AS a ' +
+      'JOIN label AS b ON ' +
+      'a.label_id = b.id ' +
+      'WHERE a.file_id = ?';
+    connection.query(sql, [fileResult.id], function(err, rows) {
+      if (err) {
+        res.json(404, {error: 'fail'});
+        return;
+      }
+      // Add labels to result
+      fileResult.labels = rows;
+      res.json(200, fileResult);
+    });
+  });
 });
 
 // Update file
@@ -137,23 +178,41 @@ app.del('/api/files/:id', function(req, res) {
 
 // Create label
 app.post('/api/labels', function(req, res) {
-  res.send(200, "Create label");
+  if (!req.session.authenticated) {
+      res.json(404, {error: 'fail'});
+      return;
+  }
+  var title = req.body.name;
+  var description = req.body.description;
+  connection.query('INSERT INTO label SET ?, date_created = NOW()', {
+    title: title,
+    description: description,
+    user_id: req.session.user_id
+  }, function(err, result) {
+    if (err) {
+      res.json(404, {error: 'fail'});
+      return;
+    }
+    res.json(200, {success: 'win'});
+  });
 });
 
 // Query labels
 app.get('/api/labels', function(req, res) {
-  res.json(200, [
-    {
-      id: 1,
-      name: "algorithms",
-      description: ""
-    },
-    {
-      id: 2,
-      name: "restful",
-      description: ""
+  if (!req.session.authenticated) {
+      res.json(404, {error: 'fail'});
+      return;
+  }
+  var sql = 'SELECT id, title AS name, description' +
+    ' FROM label WHERE user_id = ?';
+  connection.query(sql, [req.session.user_id], function(err, rows) {
+    if (err) {
+      res.json(404, {error: 'fail'});
+      return;
     }
-  ]);
+    res.json(200, rows);
+  });
+
 });
 
 app.listen(app.get('port'));
