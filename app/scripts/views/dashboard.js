@@ -1,22 +1,27 @@
 "use strict";
 
-define(function(require) {
-  var Backbone = require("backbone");
-  var _ = require("underscore");
-  var Handlebars = require("handlebars");
-  var Markdown = require("markdown");
-  var Mousetrap = require("mousetrap");
-  var Select2 = require("select2");
-  var $ = require("jquery");
-  var dashboardTemplate = require("text!templates/dashboard-view.html");
-  var fileModel = require("models/file");
-  var labelModel = require("models/label");
-  var labelList = require("collections/label-list");
-  var fileList = require("collections/file-list");
-  var fileListView = require("views/file-list");
-  var labelListView = require("views/dashboard-sidebar");
+define([
+  "backbone",
+  "underscore",
+  "handlebars",
+  "markdown",
+  "mousetrap",
+  "select2",
+  "jquery",
+  "text!templates/dashboard-view.html",
+  "models/file",
+  "models/label",
+  "collections/label-list",
+  "collections/file-list",
+  "views/file-list",
+  "views/dashboard-sidebar"
+], function(Backbone, _, Handlebars, Markdown, Mousetrap,
+  Select2, $, dashboardTemplate, fileModel,
+  labelModel, labelList, fileList, fileListView,
+  labelListView) {
 
   var Dashboard = Backbone.View.extend({
+
     el: "#content",
 
     template: Handlebars.compile(dashboardTemplate),

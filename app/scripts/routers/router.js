@@ -9,10 +9,11 @@ define([
   "views/file",
   "views/dashboard",
   "views/about"
-], function(Backbone, headerView, fileModel,
-  session, editorView, fileView,
-  dashboardView, aboutView) {
+], function(Backbone, headerView, fileModel, session,
+  editorView, fileView, dashboardView, aboutView) {
+
   var appRouter = Backbone.Router.extend({
+
     routes: {
       "": "main",
       "file/:id/edit": "edit",
