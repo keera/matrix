@@ -1,10 +1,12 @@
 "use strict";
 
-define(function(require) {
-  var Backbone = require("backbone");
-  var Handlebars = require("handlebars");
-  var aboutTemplate = require("text!templates/about-view.html");
-  var session = require("models/session").getSession();
+define([
+  "backbone",
+  "handlebars",
+  "text!templates/about-view.html",
+  "models/session"
+], function(Backbone, Handlebars, aboutTemplate, session) {
+  session = session.getSession();
 
   var About = Backbone.View.extend({
     el: "#content",
