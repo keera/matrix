@@ -32,6 +32,11 @@ body {
     background-image: url("http://www.icedgraphics.com/wp-content/uploads/2012/02/grey-background.jpg");
 }
 
+.jumbotron {
+    background-image: url("http://images2.fanpop.com/images/photos/6100000/The-Matrix-Neo-Wallpaper-the-matrix-6100690-1280-1024.jpg");
+    border: solid #000;
+}
+
 .navbar-inverse .navbar-brand {
     color: #24b05f;
     font-weight: bold;

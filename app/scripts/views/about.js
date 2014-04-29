@@ -13,12 +13,11 @@ define(function(require) {
 
     events: {
       "click #dashboard-sidebar a": "updateFilelist",
-      "click #login-modal button": "login",
-      "click #signup-modal .signup": "signup"
+      "click #login-modal #login": "login",
+      "click #signup-modal #signup": "signup"
     },
 
     signup: function() {
-      console.log("hello");
       var username = this.$('#signup-modal .username').val();
       var password = this.$('#signup-modal .password').val();
       var options = {
