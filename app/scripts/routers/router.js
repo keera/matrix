@@ -38,9 +38,9 @@ define([
       });
     },
 
-    view: function() {
+    view: function(id) {
       (new headerView()).render();
-      var m = new fileModel({title:"Hello World", content: "this is what I'm taling about"});
+      var m = new fileModel({id: id});
       (new fileView({model: m}).render());
     },
 

@@ -71,17 +71,20 @@ define([
 
     setupFileSearch: function() {
       var format = function(item) {
-        return item.name;
+        return item.title;
       };
       this.$("#url").select2({
+        id: function(obj) {
+          return "http://localhost:3000/#file/" + obj.id + "/view";
+        },
         ajax: {
-          url: "http://api",
+          url: "api/files/search",
           dataType: "json",
           data: function(term, page) {
             return {q: term}
           },
           results: function(term, page) {
-            return {results: term};
+            return {results: term, text: "title"};
           }
         },
         formatSelection: format,

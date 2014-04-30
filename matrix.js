@@ -11,16 +11,12 @@ var connection = mysql.createConnection({
   user: 'root',
   password: 'root'
 });
+
 app.set('port', process.env.PORT || 3000);
 app.use(express.bodyParser());
 app.use(cookieParser());
 app.use(session({secret: 'gggunit', key: 'sid'}));
 app.use(express.static(__dirname + '/app'));
-
-var datastore = {
-  username: 'testuser',
-  password: 'testpassword'
-};
 
 app.get('/', function(req, res) {
   res.status(200).sendfile('index.html');
@@ -131,6 +127,21 @@ app.get('/api/files', function(req, res) {
     labels: []
   };
   res.json(200, [file1, file2]);
+});
+
+app.get('/api/files/search', function(req, res) {
+  if (!req.session.authenticated) {
+      res.json(404, {error: 'fail'});
+      return;
+  }
+  connection.query('SELECT * FROM file WHERE title LIKE ? AND user_id = ?',
+    ["%" + req.query.q + "%", req.session.user_id], function(err, rows) {
+    if (err) {
+      res.json(404, {error: 'fail'});
+      return;
+    }
+    res.json(200, rows);
+  });
 });
 
 // Get file
