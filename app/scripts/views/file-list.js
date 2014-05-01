@@ -21,18 +21,34 @@ define([
     },
 
     postInit: function() {
-      var data=[{id:0,tag:'enhancement'},
-        {id:1,tag:'Knuth Morris Pratt'},
-        {id:2,tag:'Boyer Moore'},
-        {id:3,tag:'Rabin Karp'},
-        {id:4,tag:'wontfix'}];
-      function format(item) { return item.tag; }
+      var format = function(item) {
+        return item.title;
+      };
+      // Should search by the label
+      // TODO: modularize select field setup
       this.$("#file-search").select2({
-          width: "copy",
-          data:{ results: data, text: 'tag' },
-          formatSelection: format,
-          formatResult: format
+        id: function(obj) {
+          return "http://localhost:3000/#file/" + obj.id + "/view";
+        },
+        ajax: {
+          url: "api/files/search",
+          dataType: "json",
+          data: function(term, page) {
+            return {q: term}
+          },
+          results: function(term, page) {
+            return {results: term, text: "title"};
+          }
+        },
+        formatSelection: format,
+        formatResult: format
       });
+      // Attach selection change handler
+      this.$("#file-search").on("change", _.bind(this.openFile, this));
+    },
+
+    openFile: function(ev) {
+      alert(ev.val);
     },
 
     render: function() {
