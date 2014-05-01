@@ -107,26 +107,42 @@ app.post('/api/files', function(req, res) {
 
 // Query files
 app.get('/api/files', function(req, res) {
-  var file1 = {
-    id: 1,
-    title: "First restful get",
-    content: "nothing to see here!",
-    created: "yesterday",
-    modified: "today",
-    published: false,
-    labels: []
-  };
-  var file2 = {
-    id: 2,
-    title: "First restful get",
-    title: "The tao that can be named is not the eternal tao",
-    content: "nothing to see here!",
-    created: "4 days ago",
-    modified: "yesterday",
-    published: false,
-    labels: []
-  };
-  res.json(200, [file1, file2]);
+  if (!req.session.authenticated) {
+      res.json(404, {error: 'fail'});
+      return;
+  }
+  connection.query('SELECT * FROM file WHERE user_id = ?',
+    [req.session.user_id], function(err, rows) {
+    if (err) {
+      res.json(404, {error: 'fail'});
+      return;
+    }
+    var labelQueries = [];
+    var getLabelQueryClosure = function(file) {
+      return function(callback) {
+        var sql = 'SELECT id, title AS name ' +
+          'FROM file_label AS a ' +
+          'JOIN label AS b ON ' +
+          'a.label_id = b.id ' +
+          'WHERE a.file_id = ?';
+        connection.query(sql, [file.id], function(err, rows) {
+          if (err) {
+            res.json(404, {error: 'fail'});
+            return;
+          }
+          // Add labels to file
+          file.labels = rows;
+          callback(null, file);
+        });
+      };
+    };
+    for (var i = 0; i < rows.length; i++) {
+      labelQueries.push(getLabelQueryClosure(rows[i]));
+    };
+    async.parallel(labelQueries, function(err, results) {
+      res.json(200, rows);
+    });
+  });
 });
 
 app.get('/api/files/search', function(req, res) {

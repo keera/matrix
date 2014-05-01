@@ -19,10 +19,9 @@
     <td>{{created}}</td>
     <td>{{modified}}</td>
     <td>
-        <span class="label label-primary">careers</span>
-        <span class="label label-primary">psychology</span>
-        <span class="label label-primary">war</span>
-        <span class="label label-primary">technology</span>
+        {{#each labels}}
+        <span class="label label-primary">{{name}}</span>
+        {{/each}}
     </td>
     <td><span class="label label-success">Yes</span></td>
     <td>
