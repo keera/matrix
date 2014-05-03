@@ -5,9 +5,9 @@ define([
     defaults: {
       title: "untitled",
       content: "nothing to see here!",
-      created: "today",
-      modified: "2 days ago",
-      published: false,
+      date_created: "today",
+      date_modified: "2 days ago",
+      is_published: false,
       labels: []
     },
     urlRoot: "/api/files",

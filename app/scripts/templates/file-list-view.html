@@ -16,14 +16,20 @@
 {{#each files}}
 <tr>
     <td>{{title}}</td>
-    <td>{{created}}</td>
-    <td>{{modified}}</td>
+    <td>{{formatDatetime date_created}}</td>
+    <td>{{formatDatetime date_modified}}</td>
     <td>
         {{#each labels}}
         <span class="label label-primary">{{name}}</span>
         {{/each}}
     </td>
-    <td><span class="label label-success">Yes</span></td>
+    <td>
+        {{#if is_published}}
+            <span class="label label-success">Yes</span>
+        {{else}}
+            <span class="label label-warning">No</span>
+        {{/if}}
+    </td>
     <td>
         <a class="edit-file" href="#file/{{id}}/edit" target="_blank">Edit</a>
         <a class="view-file" href="#file/{{id}}/view" target="_blank">View</a>
