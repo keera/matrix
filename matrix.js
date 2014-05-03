@@ -92,7 +92,6 @@ app.post('/api/files', function(req, res) {
       res.json(404, {error: 'fail'});
       return;
   }
-  console.log("creating another file?");
   connection.query('INSERT INTO file SET ?, date_created = NOW(), date_modified = NOW()', {
     title: "Untitled",
     user_id: req.session.user_id
@@ -105,14 +104,57 @@ app.post('/api/files', function(req, res) {
   });
 });
 
+// Query all files
+app.get('/api/files/all', function(req, res) {
+  if (!req.session.authenticated) {
+      res.json(404, {error: 'fail'});
+      return;
+  }
+  var allQuery = 'SELECT * FROM file WHERE user_id = ?';
+  connection.query(allQuery,
+    [req.session.user_id], function(err, rows) {
+    if (err) {
+      res.json(404, {error: 'fail'});
+      return;
+    }
+    var labelQueries = [];
+    var getLabelQueryClosure = function(file) {
+      return function(callback) {
+        var sql = 'SELECT id, title AS name ' +
+          'FROM file_label AS a ' +
+          'JOIN label AS b ON ' +
+          'a.label_id = b.id ' +
+          'WHERE a.file_id = ?';
+        connection.query(sql, [file.id], function(err, rows) {
+          if (err) {
+            res.json(404, {error: 'fail'});
+            return;
+          }
+          // Add labels to file
+          file.labels = rows;
+          callback(null, file);
+        });
+      };
+    };
+    for (var i = 0; i < rows.length; i++) {
+      labelQueries.push(getLabelQueryClosure(rows[i]));
+    };
+    async.parallel(labelQueries, function(err, results) {
+      res.json(200, rows);
+    });
+  });
+});
+
 // Query files
 app.get('/api/files', function(req, res) {
   if (!req.session.authenticated) {
       res.json(404, {error: 'fail'});
       return;
   }
-  connection.query('SELECT * FROM file WHERE user_id = ?',
-    [req.session.user_id], function(err, rows) {
+  var label = req.query.label_id;
+  var labelSpecific = "SELECT * from file as a join file_label as b on a.id = b.file_id where a.user_id = ? AND b.label_id = ?;"
+  connection.query(labelSpecific,
+    [req.session.user_id, label], function(err, rows) {
     if (err) {
       res.json(404, {error: 'fail'});
       return;

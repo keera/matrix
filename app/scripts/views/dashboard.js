@@ -38,23 +38,28 @@ define([
     },
 
     updateFilelist: function(e) {
-      console.log("Updating file list");
       var headerLabelEl = this.$("#header-label");
       var currLinkEl = this.$(e.target);
       this.updateActiveLink(currLinkEl.parent());
+      // Update header
       headerLabelEl.html(currLinkEl.html());
-      // go iterative through
-      // turn everyone except target off
-      // Get the name, use it to search for the ID in
-      // labels
-      // set the url and fetch
-      // fileList.fetch();
+      var selectedLabel = this.labelCollection.findWhere({
+        "name": currLinkEl.text()
+      });
+      if (!selectedLabel) return;
+      var data = {
+        label_id: selectedLabel.get("id")
+      };
+      this.fileCollection.url = "/api/files?" + $.param(data);
+      this.fileCollection.fetch({reset: true});
     },
 
     render: function() {
       this.$el.html(this.template());
-      (new fileListView({collection: (new fileList())})).render();
-      (new labelListView({collection: (new labelList())})).render();
+      this.labelCollection = new labelList();
+      this.fileCollection = new fileList();
+      (new fileListView({collection: this.fileCollection})).render();
+      (new labelListView({collection: this.labelCollection})).render();
       return this;
     }
   });
