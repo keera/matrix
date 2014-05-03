@@ -36,7 +36,8 @@ require.config({
         text: "../bower_components/requirejs-text/text",
         handlebars: "../bower_components/handlebars/handlebars",
         bootstrap: "../bower_components/bootstrap/dist/js/bootstrap",
-        select2: "../bower_components/select2/select2"
+        select2: "../bower_components/select2/select2",
+        moment: "../bower_components/momentjs/moment"
     }
 });
 

@@ -93,7 +93,7 @@ app.post('/api/files', function(req, res) {
       return;
   }
   console.log("creating another file?");
-  connection.query('INSERT INTO file SET ?, date_created = NOW()', {
+  connection.query('INSERT INTO file SET ?, date_created = NOW(), date_modified = NOW()', {
     title: "Untitled",
     user_id: req.session.user_id
   }, function(err, result) {

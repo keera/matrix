@@ -5,9 +5,10 @@ define([
   "underscore",
   "handlebars",
   "text!templates/file-list-view.html",
-  "select2"
+  "select2",
+  "moment"
 ], function(Backbone, _, Handlebars, filelistTemplate,
-  Select2) {
+  Select2, moment) {
 
   var Filelist = Backbone.View.extend({
 
@@ -18,6 +19,9 @@ define([
     initialize: function() {
       this.listenTo(this.collection, 'reset', this.render);
       this.collection.fetch({reset: true});
+      Handlebars.registerHelper("formatDatetime", function(datetime) {
+        return moment(datetime).fromNow();
+      });
     },
 
     postInit: function() {
