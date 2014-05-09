@@ -43,15 +43,17 @@ define([
       this.updateActiveLink(currLinkEl.parent());
       // Update header
       headerLabelEl.html(currLinkEl.html());
+      var linkText = currLinkEl.text();
       var selectedLabel = this.labelCollection.findWhere({
-        "name": currLinkEl.text()
+        "name": linkText
       });
-      if (!selectedLabel) return;
-      var data = {
+      if (linkText === 'All' || !selectedLabel) {
+        this.fileCollection.fetchAll();
+        return;
+      }
+      this.fileCollection.fetchByLabel({
         label_id: selectedLabel.get("id")
-      };
-      this.fileCollection.url = "/api/files?" + $.param(data);
-      this.fileCollection.fetch({reset: true});
+      });
     },
 
     render: function() {
