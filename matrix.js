@@ -104,6 +104,34 @@ app.post('/api/files', function(req, res) {
   });
 });
 
+var getFileLabels = function(req, res, rows) {
+  var labelQueries = [];
+  var getLabelQueryClosure = function(file) {
+    return function(callback) {
+      var sql = 'SELECT id, title AS name ' +
+        'FROM file_label AS a ' +
+        'JOIN label AS b ON ' +
+        'a.label_id = b.id ' +
+        'WHERE a.file_id = ?';
+      connection.query(sql, [file.id], function(err, rows) {
+        if (err) {
+          res.json(404, {error: 'fail'});
+          return;
+        }
+        // Add labels to file
+        file.labels = rows;
+        callback(null, file);
+      });
+    };
+  };
+  for (var i = 0; i < rows.length; i++) {
+    labelQueries.push(getLabelQueryClosure(rows[i]));
+  };
+  async.parallel(labelQueries, function(err, results) {
+    res.json(200, rows);
+  });
+};
+
 // Query all files
 app.get('/api/files/all', function(req, res) {
   if (!req.session.authenticated) {
@@ -117,31 +145,7 @@ app.get('/api/files/all', function(req, res) {
       res.json(404, {error: 'fail'});
       return;
     }
-    var labelQueries = [];
-    var getLabelQueryClosure = function(file) {
-      return function(callback) {
-        var sql = 'SELECT id, title AS name ' +
-          'FROM file_label AS a ' +
-          'JOIN label AS b ON ' +
-          'a.label_id = b.id ' +
-          'WHERE a.file_id = ?';
-        connection.query(sql, [file.id], function(err, rows) {
-          if (err) {
-            res.json(404, {error: 'fail'});
-            return;
-          }
-          // Add labels to file
-          file.labels = rows;
-          callback(null, file);
-        });
-      };
-    };
-    for (var i = 0; i < rows.length; i++) {
-      labelQueries.push(getLabelQueryClosure(rows[i]));
-    };
-    async.parallel(labelQueries, function(err, results) {
-      res.json(200, rows);
-    });
+    getFileLabels(req, res, rows);
   });
 });
 
@@ -159,31 +163,7 @@ app.get('/api/files', function(req, res) {
       res.json(404, {error: 'fail'});
       return;
     }
-    var labelQueries = [];
-    var getLabelQueryClosure = function(file) {
-      return function(callback) {
-        var sql = 'SELECT id, title AS name ' +
-          'FROM file_label AS a ' +
-          'JOIN label AS b ON ' +
-          'a.label_id = b.id ' +
-          'WHERE a.file_id = ?';
-        connection.query(sql, [file.id], function(err, rows) {
-          if (err) {
-            res.json(404, {error: 'fail'});
-            return;
-          }
-          // Add labels to file
-          file.labels = rows;
-          callback(null, file);
-        });
-      };
-    };
-    for (var i = 0; i < rows.length; i++) {
-      labelQueries.push(getLabelQueryClosure(rows[i]));
-    };
-    async.parallel(labelQueries, function(err, results) {
-      res.json(200, rows);
-    });
+    getFileLabels(req, res, rows);
   });
 });
 
