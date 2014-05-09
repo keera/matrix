@@ -156,7 +156,10 @@ app.get('/api/files', function(req, res) {
       return;
   }
   var label = req.query.label_id;
-  var labelSpecific = "SELECT * from file as a join file_label as b on a.id = b.file_id where a.user_id = ? AND b.label_id = ?;"
+  var labelSpecific = "SELECT * FROM file AS a " +
+    "JOIN file_label AS b " +
+    "ON a.id = b.file_id " +
+    "WHERE a.user_id = ? AND b.label_id = ?;"
   connection.query(labelSpecific,
     [req.session.user_id, label], function(err, rows) {
     if (err) {
@@ -335,6 +338,7 @@ app.get('/api/labels', function(req, res) {
       res.json(404, {error: 'fail'});
       return;
   }
+  // TODO: Refactor
   if (!req.query.q) {
     req.query.q = "";
   }
