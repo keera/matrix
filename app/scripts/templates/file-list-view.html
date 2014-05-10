@@ -1,42 +1,42 @@
-<h2 class="sub-header">Files <small id="header-label">All</small></h2>
 <div class="table-responsive">
     <input id="file-search" type="hidden" class="form-control" placeholder="Knuth Morris Pratt">
-<table class="table table-hover">
-<thead>
-<tr>
-  <th>Title</th>
-  <th>Date created</th>
-  <th>Last modified</th>
-  <th>Labels</th>
-  <th>Published</th>
-  <th>Options</th>
-</tr>
-</thead>
-<tbody>
-{{#each files}}
-<tr>
-    <td>{{title}}</td>
-    <td>{{formatDatetime date_created}}</td>
-    <td>{{formatDatetime date_modified}}</td>
-    <td>
-        {{#each labels}}
-        <span class="label label-primary">{{name}}</span>
-        {{/each}}
-    </td>
-    <td>
-        {{#if is_published}}
-            <span class="label label-success">Yes</span>
-        {{else}}
-            <span class="label label-warning">No</span>
-        {{/if}}
-    </td>
-    <td>
-        <a class="edit-file" href="#file/{{id}}/edit" target="_blank">Edit</a>
-        <a class="view-file" href="#file/{{id}}/view" target="_blank">View</a>
-    </td>
-</tr>
-{{/each}}
-</tbody>
-</table>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Date created</th>
+                <th>Last modified</th>
+                <th>Labels</th>
+                <th>Published</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each files}}
+            <tr>
+                <td>{{title}}</td>
+                <td>{{formatDatetime date_created}}</td>
+                <td>{{formatDatetime date_modified}}</td>
+                <td>
+                    {{#each labels}}
+                    <span class="label label-primary">{{name}}</span>
+                    {{/each}}
+                </td>
+                <td>
+                    {{#if is_published}}
+                    <span class="label label-success">Yes</span>
+                    {{else}}
+                    <span class="label label-warning">No</span>
+                    {{/if}}
+                </td>
+                <td>
+                    <a class="edit-file" href="#file/{{id}}/edit" target="_blank">Edit</a>
+                    <a class="view-file" href="#file/{{id}}/view" target="_blank">View</a>
+                    <a class="delete-file" data-id="{{id}}">Delete</a>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
 </div>
 

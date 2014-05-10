@@ -18,10 +18,15 @@ define([
 
     initialize: function() {
       this.listenTo(this.collection, 'reset', this.render);
+      this.listenTo(this.collection, 'destroy', this.render);
       this.collection.fetch({reset: true});
       Handlebars.registerHelper("formatDatetime", function(datetime) {
         return moment(datetime).fromNow();
       });
+    },
+
+    events: {
+      "click .delete-file": "deleteFile"
     },
 
     postInit: function() {
@@ -53,6 +58,13 @@ define([
 
     openFile: function(ev) {
       alert(ev.val);
+    },
+
+    deleteFile: function(ev) {
+      var model = this.collection.findWhere({
+        id: this.$(ev.target).data("id")
+      });
+      model.destroy({wait: true});
     },
 
     render: function() {

@@ -43,6 +43,7 @@ define([
       this.updateActiveLink(currLinkEl.parent());
       // Update header
       headerLabelEl.html(currLinkEl.html());
+      // Get selected label and fetch
       var linkText = currLinkEl.text();
       var selectedLabel = this.labelCollection.findWhere({
         "name": linkText

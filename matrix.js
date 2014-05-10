@@ -308,7 +308,20 @@ app.put('/api/files/:id', function(req, res) {
 
 // Delete file
 app.del('/api/files/:id', function(req, res) {
-  res.send(200, "Delete file");
+  if (!req.session.authenticated) {
+      res.json(404, {error: 'fail'});
+      return;
+  }
+  var fileId = req.params.id;
+  connection.query("DELETE FROM file WHERE id = ? AND user_id = ?",
+  [fileId, req.session.user_id], function(err, result) {
+    if (err) throw err;
+    if (result.affectedRows > 0) {
+      res.json(200, "Delete file");
+    } else {
+      res.json(404, "Failed to delete");
+    }
+  });
 });
 
 // Create label
