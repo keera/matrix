@@ -22,6 +22,9 @@ define([
       Handlebars.registerHelper("formatDatetime", function(datetime) {
         return moment(datetime).fromNow();
       });
+      Handlebars.registerHelper("hasFiles", function(files) {
+        return (files.length > 0) ? true : false;
+      });
     },
 
     events: {
@@ -45,10 +48,12 @@ define([
 
     render: function() {
       var models = this.collection.models;
+      var files = _.map(models, function(model) {
+        return model.attributes;
+      });
       this.$el.html(this.template({
-        files: _.map(models, function(model) {
-          return model.attributes;
-        })
+        files: files,
+        hasFiles: (files.length > 0) ? true : false
       }));
       this.$el.hide().fadeIn(300);
       return this;
