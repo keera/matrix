@@ -17,7 +17,6 @@ define([
 
     initialize: function() {
       this.listenTo(this.collection, 'reset', this.render);
-      this.listenTo(this.collection, 'destroy', this.render);
       this.listenTo(this.collection, 'change', this.render);
       this.collection.fetch({reset: true});
       Handlebars.registerHelper("formatDatetime", function(datetime) {
@@ -31,8 +30,10 @@ define([
     },
 
     deleteFile: function(ev) {
+      var linkEl = this.$(ev.target);
+      linkEl.parents("tr").fadeOut(300);
       this.collection
-        .get(this.$(ev.target).data("id"))
+        .get(linkEl.data("id"))
         .destroy({wait: true});
     },
 
