@@ -63,7 +63,6 @@ define([
     updateActiveLink: function(newLink) {
       var currLabelEl = this.$(".nav li.active");
       currLabelEl.removeClass("active");
-      console.log(currLabelEl);
       newLink.addClass("active");
     },
 

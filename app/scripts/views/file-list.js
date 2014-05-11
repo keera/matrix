@@ -42,6 +42,7 @@ define([
           return model.attributes;
         })
       }));
+      this.$el.hide().fadeIn(300);
       return this;
     }
   });
