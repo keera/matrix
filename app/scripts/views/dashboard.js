@@ -30,6 +30,36 @@ define([
       "click #dashboard-sidebar a": "updateFilelist"
     },
 
+    postInit: function() {
+      var format = function(item) {
+        return item.title;
+      };
+      this.$("#file-search").select2({
+        id: function(obj) {
+          return "http://localhost:3000/#file/" + obj.id + "/view";
+        },
+        ajax: {
+          url: "api/files/search",
+          dataType: "json",
+          data: function(term, page) {
+            return {q: term}
+          },
+          results: function(term, page) {
+            return {results: term, text: "title"};
+          }
+        },
+        formatSelection: format,
+        formatResult: format
+      });
+      // Attach selection change handler
+      this.$("#file-search").on("change", _.bind(this.openFile, this));
+      console.log(this.$("#file-search"));
+    },
+
+    openFile: function(ev) {
+      alert(ev.val);
+    },
+
     updateActiveLink: function(newLink) {
       var currLabelEl = this.$(".nav li.active");
       currLabelEl.removeClass("active");
@@ -63,6 +93,7 @@ define([
       this.fileCollection = new fileList();
       (new fileListView({collection: this.fileCollection})).render();
       (new labelListView({collection: this.labelCollection})).render();
+      this.postInit();
       return this;
     }
   });
