@@ -53,11 +53,10 @@ define([
       });
       // Attach selection change handler
       this.$("#file-search").on("change", _.bind(this.openFile, this));
-      console.log(this.$("#file-search"));
     },
 
     openFile: function(ev) {
-      alert(ev.val);
+      window.open(ev.val, "_blank");
     },
 
     updateActiveLink: function(newLink) {
