@@ -231,8 +231,9 @@ app.put('/api/files/:id', function(req, res) {
   var fileId = req.body.id;
   var title = req.body.title;
   var content = req.body.content;
-  var addLabels = req.body.add_labels;
-  var deleteLabels = req.body.delete_labels;
+  var isPublished = req.body.is_published;
+  var addLabels = req.body.add_labels || [];
+  var deleteLabels = req.body.delete_labels || [];
 
   connection.beginTransaction(function(err) {
     if (err) {
@@ -243,6 +244,7 @@ app.put('/api/files/:id', function(req, res) {
     connection.query(sql, [{
       title: title,
       content: content,
+      is_published: isPublished
     }, {
       id: fileId
     }, {

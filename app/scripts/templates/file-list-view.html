@@ -32,6 +32,11 @@
                     <a class="edit-file" href="#file/{{id}}/edit" target="_blank">Edit</a>
                     <a class="view-file" href="#file/{{id}}/view" target="_blank">View</a>
                     <a class="delete-file" data-id="{{id}}">Delete</a>
+                    {{#if is_published}}
+                    <a class="toggle-publish" data-id="{{id}}">Unpublish</a>
+                    {{else}}
+                    <a class="toggle-publish" data-id="{{id}}">Publish</a>
+                    {{/if}}
                 </td>
             </tr>
             {{/each}}
