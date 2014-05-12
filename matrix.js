@@ -1,8 +1,11 @@
 var express = require('express');
+var fs = require('fs');
 var cookieParser = require('cookie-parser');
 var session = require("express-session");
 var crypto = require('crypto');
 var async = require("async");
+var markdown = require("markdown").markdown;
+var handlebars = require("handlebars");
 var mysql = require('mysql');
 var app = express();
 
@@ -11,6 +14,10 @@ var connection = mysql.createConnection({
   database: 'matrix',
   user: 'root',
   password: 'root'
+});
+
+handlebars.registerHelper("markdown", function(content) {
+  return markdown.toHTML(content);
 });
 
 app.set('port', process.env.PORT || 3000);
@@ -25,6 +32,35 @@ var genSha1Hash = function(val) {
 
 app.get('/', function(req, res) {
   res.status(200).sendfile('index.html');
+});
+
+app.get('/blog', function(req, res) {
+  fs.readFile(__dirname + "/blog/templates/archive.html","utf8", function (err, data) {
+      if (err) throw err;
+      var template = handlebars.compile(data);
+      connection.query('SELECT * FROM file WHERE ? AND ? ORDER BY date_created DESC',
+        [{is_published: true}, {
+      user_id: 13
+      }], function(err, rows) {
+        var result = template({files: rows});
+        res.status(200).send(result);
+      });
+  });
+});
+
+app.get('/blog/files/:id', function(req, res) {
+  fs.readFile(__dirname + "/blog/templates/file.html","utf8", function (err, data) {
+      if (err) throw err;
+      var template = handlebars.compile(data);
+      connection.query('SELECT * FROM file WHERE ? AND ? AND ?',
+        [{id: req.params.id}, {is_published: true}, {
+      user_id: 13
+      }], function(err, rows) {
+        console.log(rows);
+        var result = template(rows[0]);
+        res.status(200).send(result);
+      });
+  });
 });
 
 // User authentication
