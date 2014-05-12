@@ -111,3 +111,12 @@ body {
     border-radius: 0;
     border: 1px solid #24B05F;
 }
+
+.sub-header {
+    border-bottom: 1px solid #428BCA;
+}
+
+#header-label {
+    color: #000;
+    font-weight: bold;
+}
