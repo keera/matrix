@@ -33,7 +33,7 @@ define([
       file.save({}, {
         success: function(model, response, options) {
           var modelId = model.get("id");
-          window.open("#file/" + modelId + "/edit", "_blank");
+          window.open(session.getBaseUrl() + "/#file/" + modelId + "/edit", "_blank");
         }
       });
     },
@@ -78,8 +78,7 @@ define([
     logout: function() {
       session.logout({
         success: function() {
-          alert("Goodbye!");
-          window.location = "http://localhost:3000";
+          window.location = session.getBaseUrl();
         },
         failure: function() {
           alert("failed to logout");

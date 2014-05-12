@@ -1,10 +1,14 @@
 define([
   "backbone",
-  "models/label"
-], function(Backbone, labelModel) {
+  "models/label",
+  "models/session"
+], function(Backbone, labelModel, session) {
+
+  session = session.getSession();
+
   var Labellist = Backbone.Collection.extend({
     model: labelModel,
-    url: "/api/labels"
+    url: session.getBaseUrl() + "/api/labels"
   });
 
   Labellist.getIds = function(labels) {

@@ -1,21 +1,25 @@
 define([
   "backbone",
   "jquery",
-  "models/file"
-], function(Backbone, $, fileModel) {
+  "models/file",
+  "models/session"
+], function(Backbone, $, fileModel, session) {
+
+  session = session.getSession();
+
   var Filelist = Backbone.Collection.extend({
 
     model: fileModel,
 
-    url: "/api/files/all",
+    url: session.getBaseUrl() + "/api/files/all",
 
     fetchAll: function() {
-      this.url = "/api/files/all"
+      this.url = session.getBaseUrl() + "/api/files/all"
       this.fetch({reset: true});
     },
 
     fetchByLabel: function(data) {
-      this.url = "/api/files?" + $.param(data);
+      this.url = session.getBaseUrl() + "/api/files?" + $.param(data);
       this.fetch({reset: true});
     }
   });

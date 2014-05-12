@@ -11,14 +11,17 @@ define([
   "text!templates/dashboard-view.html",
   "models/file",
   "models/label",
+  "models/session",
   "collections/label-list",
   "collections/file-list",
   "views/file-list",
   "views/dashboard-sidebar"
 ], function(Backbone, _, Handlebars, Markdown, Mousetrap,
   Select2, $, dashboardTemplate, fileModel,
-  labelModel, labelList, fileList, fileListView,
+  labelModel, session, labelList, fileList, fileListView,
   labelListView) {
+
+  session = session.getSession();
 
   var Dashboard = Backbone.View.extend({
 
@@ -36,10 +39,10 @@ define([
       };
       this.$("#file-search").select2({
         id: function(obj) {
-          return "http://localhost:3000/#file/" + obj.id + "/view";
+          return session.getBaseUrl() + "/#file/" + obj.id + "/view";
         },
         ajax: {
-          url: "api/files/search",
+          url: session.getBaseUrl() + "/api/files/search",
           dataType: "json",
           data: function(term, page) {
             return {q: term}

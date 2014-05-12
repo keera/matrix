@@ -1,6 +1,10 @@
 define([
-  "backbone"
-], function(Backbone) {
+  "backbone",
+  "models/session"
+], function(Backbone, session) {
+
+  session = session.getSession();
+
   var File = Backbone.Model.extend({
     defaults: {
       title: "untitled",
@@ -19,7 +23,7 @@ define([
       });
     },
 
-    urlRoot: "/api/files",
+    urlRoot: session.getBaseUrl() + "/api/files",
   });
 
   return File;

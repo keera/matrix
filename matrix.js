@@ -9,6 +9,13 @@ var handlebars = require("handlebars");
 var mysql = require('mysql');
 var app = express();
 
+app.set('port', process.env.PORT || 3000);
+app.use(express.bodyParser());
+app.use(cookieParser());
+app.use(session({secret: 'gunit', key: 'sid'}));
+app.use('/admin', express.static(__dirname + '/app'));
+
+// Setup
 var connection = mysql.createConnection({
   host: 'localhost',
   database: 'matrix',
@@ -21,22 +28,12 @@ handlebars.registerHelper("markdown", function(content) {
   return markdown.toHTML(content);
 });
 
-app.set('port', process.env.PORT || 3000);
-app.use(express.bodyParser());
-app.use(cookieParser());
-app.use(session({secret: 'gggunit', key: 'sid'}));
-app.use(express.static(__dirname + '/app'));
-
 var genSha1Hash = function(val) {
   return crypto.createHash('sha1').update(val).digest('hex');
 }
 
+// Blog archive
 app.get('/', function(req, res) {
-  res.status(200).sendfile('index.html');
-});
-
-app.get('/blog', function(req, res) {
-
   fs.readFile(__dirname + "/blog/templates/archive.html","utf8", function (err, data) {
     if (err) throw err;
     var template = handlebars.compile(data);
@@ -52,9 +49,10 @@ app.get('/blog', function(req, res) {
   });
 });
 
-app.get('/blog/files/:id', function(req, res) {
+// File
+app.get('/file/:id', function(req, res) {
   if (req.session.authenticated) {
-    res.redirect("/#file/" + req.params.id + "/view");
+    res.redirect("/admin/#file/" + req.params.id + "/view");
     return;
   }
   fs.readFile(__dirname + "/blog/templates/file.html", "utf8", function (err, data) {
@@ -77,8 +75,12 @@ app.get('/blog/files/:id', function(req, res) {
   });
 });
 
+app.get('/admin', function(req, res) {
+  res.sendfile(__dirname + "/app/index.html");
+});
+
 // User authentication
-app.post('/api/signup', function(req, res) {
+app.post('/admin/api/signup', function(req, res) {
   var username = req.body.username;
   var password = req.body.password;
   // Check if exists first
@@ -111,7 +113,7 @@ app.post('/api/signup', function(req, res) {
   });
 });
 
-app.get('/api/authen', function(req, res) {
+app.get('/admin/api/authen', function(req, res) {
   if (req.session.authenticated) {
     res.json(200, {msg: 'win'});
     return;
@@ -119,7 +121,7 @@ app.get('/api/authen', function(req, res) {
   res.json(400, {msg: 'fail'});
 });
 
-app.post('/api/login', function(req, res) {
+app.post('/admin/api/login', function(req, res) {
   if (req.session.authenticated) {
     res.json(200, {msg: 'win'});
     return;
@@ -146,13 +148,13 @@ app.post('/api/login', function(req, res) {
   });
 });
 
-app.post('/api/logout', function(req, res) {
+app.post('/admin/api/logout', function(req, res) {
   req.session.destroy();
   res.json(200, {success: 'destroyed'});
 });
 
 // Create file
-app.post('/api/files', function(req, res) {
+app.post('/admin/api/files', function(req, res) {
   /*var newFile = {
       id: 3,
       title: "Untitled",
@@ -208,7 +210,7 @@ var getFileLabels = function(req, res, rows) {
 };
 
 // Query all files
-app.get('/api/files/all', function(req, res) {
+app.get('/admin/api/files/all', function(req, res) {
   if (!req.session.authenticated) {
       res.json(404, {error: 'fail'});
       return;
@@ -225,7 +227,7 @@ app.get('/api/files/all', function(req, res) {
 });
 
 // Query files
-app.get('/api/files', function(req, res) {
+app.get('/admin/api/files', function(req, res) {
   if (!req.session.authenticated) {
       res.json(404, {error: 'fail'});
       return;
@@ -245,7 +247,7 @@ app.get('/api/files', function(req, res) {
   });
 });
 
-app.get('/api/files/search', function(req, res) {
+app.get('/admin/api/files/search', function(req, res) {
   if (!req.session.authenticated) {
       res.json(404, {error: 'fail'});
       return;
@@ -261,7 +263,7 @@ app.get('/api/files/search', function(req, res) {
 });
 
 // Get file
-app.get('/api/files/:id', function(req, res) {
+app.get('/admin/api/files/:id', function(req, res) {
   if (!req.session.authenticated) {
       res.json(404, {error: 'fail'});
       return;
@@ -297,7 +299,7 @@ app.get('/api/files/:id', function(req, res) {
 });
 
 // Update file
-app.put('/api/files/:id', function(req, res) {
+app.put('/admin/api/files/:id', function(req, res) {
   if (!req.session.authenticated) {
       res.json(404, {error: 'fail'});
       return;
@@ -383,7 +385,7 @@ app.put('/api/files/:id', function(req, res) {
 });
 
 // Delete file
-app.del('/api/files/:id', function(req, res) {
+app.del('/admin/api/files/:id', function(req, res) {
   if (!req.session.authenticated) {
       res.json(404, {error: 'fail'});
       return;
@@ -401,7 +403,7 @@ app.del('/api/files/:id', function(req, res) {
 });
 
 // Create label
-app.post('/api/labels', function(req, res) {
+app.post('/admin/api/labels', function(req, res) {
   if (!req.session.authenticated) {
       res.json(404, {error: 'fail'});
       return;
@@ -422,7 +424,7 @@ app.post('/api/labels', function(req, res) {
 });
 
 // Query labels
-app.get('/api/labels', function(req, res) {
+app.get('/admin/api/labels', function(req, res) {
   if (!req.session.authenticated) {
       res.json(404, {error: 'fail'});
       return;

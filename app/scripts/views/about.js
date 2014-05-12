@@ -58,7 +58,7 @@ define([
       })) {
         var options = {
           success: function(msg) {
-            window.location = "http://localhost:3000";
+            window.location = session.getBaseUrl();
           },
           failure: function(msg) {
             notificationEl.text(msg).slideDown();
@@ -81,7 +81,7 @@ define([
       })) {
         var options = {
           success: function(msg) {
-            window.location = "http://localhost:3000";
+            window.location = session.getBaseUrl();
           },
           failure: function(msg) {
             notificationEl.text(msg).slideDown();

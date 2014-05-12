@@ -8,11 +8,14 @@ define([
   "mousetrap",
   "select2",
   "jquery",
+  "models/session",
   "collections/label-list",
   "text!templates/edit-view.html"
 ], function(Backbone, _, Handlebars, Markdown,
-  Mousetrap, Select2, $, labelList,
-  editTemplate) {
+  Mousetrap, Select2, $, session,
+  labelList, editTemplate) {
+
+  session = session.getSession();
 
   var Editor = Backbone.View.extend({
 
@@ -54,7 +57,7 @@ define([
         multiple: true,
         width: "copy",
         ajax: {
-          url: "api/labels",
+          url: session.getBaseUrl() + "/api/labels",
           dataType: "json",
           data: function(term, page) {
             return {q: term}
@@ -76,10 +79,10 @@ define([
       };
       this.$("#url").select2({
         id: function(obj) {
-          return "http://localhost:3000/#file/" + obj.id + "/view";
+          return session.getBlogUrl() + "/file/" + obj.id;
         },
         ajax: {
-          url: "api/files/search",
+          url: session.getBaseUrl() + "/api/files/search",
           dataType: "json",
           data: function(term, page) {
             return {q: term}

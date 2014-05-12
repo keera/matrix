@@ -7,8 +7,12 @@ define([
 
     isLoggedin: false,
 
+    baseUrl: "http://localhost:3000/admin",
+
+    blogUrl: "http://localhost:3000",
+
     signup: function(username, password, cb) {
-      $.ajax("http://localhost:3000/api/signup", {
+      $.ajax(this.baseUrl + "/api/signup", {
         type: "POST",
         data: {
           username: username,
@@ -25,7 +29,7 @@ define([
     // Authen user
     authenticate: function(cb) {
       var that = this;
-      $.ajax("http://localhost:3000/api/authen", {
+      $.ajax(this.baseUrl + "/api/authen", {
           success: function() {
             that.isLoggedin = true;
             cb.success();
@@ -37,12 +41,20 @@ define([
       );
     },
 
+    getBaseUrl: function() {
+      return this.baseUrl;
+    },
+
+    getBlogUrl: function() {
+      return this.blogUrl;
+    },
+
     isAuthenticated: function(cb) {
       return this.isLoggedin;
     },
 
     login: function(username, password, cb) {
-      $.ajax("http://localhost:3000/api/login", {
+      $.ajax(this.baseUrl + "/api/login", {
           type: "POST",
           data: {
             username: username,
@@ -60,7 +72,7 @@ define([
     },
 
     logout: function(cb) {
-      $.ajax("http://localhost:3000/api/logout", {
+      $.ajax(this.baseUrl + "/api/logout", {
           type: "POST",
           success: function() {
             cb.success();
