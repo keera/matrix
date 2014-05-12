@@ -18,6 +18,7 @@ define([
     initialize: function() {
       this.listenTo(this.collection, 'reset', this.render);
       this.listenTo(this.collection, 'change', this.render);
+      this.listenTo(this.collection, 'add', this.render);
       this.collection.fetch({reset: true});
       Handlebars.registerHelper("formatDatetime", function(datetime) {
         return moment(datetime).fromNow();
@@ -25,6 +26,8 @@ define([
       Handlebars.registerHelper("hasFiles", function(files) {
         return (files.length > 0) ? true : false;
       });
+      // Keep updated
+      setInterval(_.bind(this.collection.fetch, this.collection), 10000);
     },
 
     events: {

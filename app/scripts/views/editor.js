@@ -25,7 +25,9 @@ define([
       Mousetrap.bind('mod+c', _.bind(this.formatCode, this));
       Mousetrap.bind('mod+b', _.bind(this.boldText, this));
       Mousetrap.bind('mod+l', _.bind(this.linkText, this));
-      this.model.fetch();
+      this.model.fetch({
+        success: _.bind(this.render, this)
+      });
       this.previewOn = false;
     },
 
