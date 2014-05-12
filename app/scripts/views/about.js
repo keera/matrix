@@ -23,6 +23,7 @@ define([
     },
 
     initialize: function() {
+      // TODO: should just be 1
       this.signupValidation = new user();
       this.loginValidation = new user();
       this.signupValidation.setupValidation({
@@ -50,16 +51,20 @@ define([
     signup: function() {
       var username = this.$('#signup-modal .username').val();
       var password = this.$('#signup-modal .password').val();
+      var notificationEl = this.$("#signup-notification");
       if (this.signupValidation.isValid({
         "username": username,
         "password": password
       })) {
         var options = {
-          success: function() {
+          success: function(msg) {
             window.location = "http://localhost:3000";
           },
-          failure: function() {
-            alert("Failed signup");
+          failure: function(msg) {
+            notificationEl.text(msg).slideDown();
+            setTimeout(function() {
+              notificationEl.slideUp();
+            }, 3000);
           }
         };
         session.signup(username, password, options);
@@ -69,16 +74,20 @@ define([
     login: function() {
       var username = this.$('#login-modal .username').val();
       var password = this.$('#login-modal .password').val();
+      var notificationEl = this.$("#login-notification");
       if (this.loginValidation.isValid({
         "username": username,
         "password": password
       })) {
         var options = {
-          success: function() {
+          success: function(msg) {
             window.location = "http://localhost:3000";
           },
-          failure: function() {
-            alert("failed login");
+          failure: function(msg) {
+            notificationEl.text(msg).slideDown();
+            setTimeout(function() {
+              notificationEl.slideUp();
+            }, 3000);
           }
         };
         session.login(username, password, options);

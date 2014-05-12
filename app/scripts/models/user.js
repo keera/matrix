@@ -17,7 +17,9 @@ define([
         var key = this.rules[field].id;
         if (inputVal.length < 1) {
           hasError = true;
-          $("#" + key).text("shit is empty bro");
+          $("#" + key).text(field + " cannot be empty");
+        } else {
+          $("#" + key).text("");
         }
       }
       return !hasError;

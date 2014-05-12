@@ -14,11 +14,11 @@ define([
           username: username,
           password: password
         },
-        success: function() {
-          cb.success();
+        success: function(data, text) {
+          cb.success(data);
         },
-        error: function() {
-          cb.failure();
+        error: function(data, text) {
+          cb.failure(data.responseJSON.msg);
         }
       });
     },
@@ -48,11 +48,11 @@ define([
             username: username,
             password: password
           },
-          success: function() {
-            cb.success();
+          success: function(data) {
+            cb.success(data.responseJSON.msg);
           },
-          error: function() {
-            cb.failure();
+          error: function(data) {
+            cb.failure(data.responseJSON.msg);
           }
         }
       );

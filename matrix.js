@@ -26,17 +26,33 @@ app.get('/', function(req, res) {
 app.post('/api/signup', function(req, res) {
   var username = req.body.username;
   var password = req.body.password;
-  connection.query('INSERT INTO user SET ?', {
-    username: username,
-    password: password
-  }, function(err, result) {
+  // Check if exists first
+  if (username.length < 1 || password.length < 1) {
+    res.json(400, {msg: 'Invalid username or password'});
+    return;
+  }
+  connection.query('SELECT * FROM user WHERE username = ?',
+    [username], function(err, rows) {
     if (err) {
-      res.json(404, {error: 'fail'});
+      res.json(400, {msg: 'Signup failed'});
       return;
     }
-    req.session.authenticated = true;
-    req.session.user_id = result.insertId;
-    res.json(200, {success: 'win'});
+    if (rows.length > 0) {
+      res.json(400, {msg: 'Username exists'});
+      return;
+    }
+    connection.query('INSERT INTO user SET ?', {
+      username: username,
+      password: password
+    }, function(err, result) {
+      if (err) {
+        res.json(400, {msg: 'Signup failed'});
+        return;
+      }
+      req.session.authenticated = true;
+      req.session.user_id = result.insertId;
+      res.json(200, {msg: 'win'});
+    });
   });
 });
 
@@ -55,6 +71,10 @@ app.post('/api/login', function(req, res) {
   }
   var username = req.body.username;
   var password = req.body.password;
+  if (username.length < 1 || password.length < 1) {
+    res.json(400, {msg: 'Invalid username or password'});
+    return;
+  }
   connection.query('SELECT * FROM user WHERE ? AND ?',
     [{
       username: username
@@ -62,12 +82,12 @@ app.post('/api/login', function(req, res) {
       password: password
     }], function(err, rows) {
     if (err || !rows.length) {
-      res.json(404, {error: 'fail'});
+      res.json(400, {msg: 'Invalid username or password'});
       return;
     }
     req.session.authenticated = true;
     req.session.user_id = rows[0].id;
-    res.json(200, {success: 'win'});
+    res.json(200, {msg: 'win'});
   });
 });
 
