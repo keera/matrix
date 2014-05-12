@@ -58,15 +58,15 @@ app.post('/api/signup', function(req, res) {
 
 app.get('/api/authen', function(req, res) {
   if (req.session.authenticated) {
-    res.json(200, {success: 'win'});
+    res.json(200, {msg: 'win'});
     return;
   }
-  res.json(404, {error: 'fail'});
+  res.json(400, {msg: 'fail'});
 });
 
 app.post('/api/login', function(req, res) {
   if (req.session.authenticated) {
-    res.json(200, {success: 'win'});
+    res.json(200, {msg: 'win'});
     return;
   }
   var username = req.body.username;
@@ -314,14 +314,13 @@ app.put('/api/files/:id', function(req, res) {
           });
         }
       ], function(err, results) {
-        console.log(results);
         connection.commit(function(err) {
           if (err) {
             connection.rollback(function() {
               throw err;
             });
           }
-          res.json(200, {success: 'win'});
+          res.json(200);
         });
       });
     });

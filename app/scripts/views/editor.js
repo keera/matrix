@@ -25,7 +25,6 @@ define([
       Mousetrap.bind('mod+c', _.bind(this.formatCode, this));
       Mousetrap.bind('mod+b', _.bind(this.boldText, this));
       Mousetrap.bind('mod+l', _.bind(this.linkText, this));
-      this.listenTo(this.model, "change", this.render);
       this.model.fetch();
       this.previewOn = false;
     },
@@ -161,6 +160,7 @@ define([
       var labelsEl = this.$("#labels");
       var textareaEl = this.$("textarea");
       var titleEl = this.$("#title");
+      var notificationEl = this.$(".notification");
 
       var newLabelIds = labelList.getIds(labelsEl.val().split(","));
       var oldLabelIds = labelList.getIds(this.model.get('labels'));
@@ -179,10 +179,18 @@ define([
       this.model.save(attr, {
         wait: true,
         success: function(model) {
-          alert('win');
+          var notificationSuccessEl = notificationEl.find('.alert-success');
+          notificationSuccessEl.slideDown();
+          setTimeout(function() {
+            notificationSuccessEl.slideUp();
+          }, 1000);
         },
         error: function(model) {
-          alert('failed my brotha');
+          var notificationErrorEl = notificationEl.find('.alert-danger');
+          notificationErrorEl.slideDown();
+          setTimeout(function() {
+            notificationErrorEl.slideUp();
+          }, 1000);
         }
       });
     },

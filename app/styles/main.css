@@ -102,3 +102,7 @@ body {
 #signup-notification, #login-notification {
     display: none;
 }
+
+.notification .alert {
+    display: none;
+}

@@ -15,7 +15,7 @@ define([
           password: password
         },
         success: function(data, text) {
-          cb.success(data);
+          cb.success(data.msg);
         },
         error: function(data, text) {
           cb.failure(data.responseJSON.msg);
@@ -49,7 +49,8 @@ define([
             password: password
           },
           success: function(data) {
-            cb.success(data.responseJSON.msg);
+            console.log(data);
+            cb.success(data.msg);
           },
           error: function(data) {
             cb.failure(data.responseJSON.msg);
@@ -63,9 +64,6 @@ define([
           type: "POST",
           success: function() {
             cb.success();
-          },
-          error: function() {
-            cb.failure();
           }
         }
       );
