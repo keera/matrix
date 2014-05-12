@@ -1,8 +1,47 @@
+<!doctype html>
 <html>
+    <meta charset="utf-8">
+    <title>blog</title>
+    <style type="text/css">
+        body {
+            background-color: gainsboro;
+        }
+
+        pre {
+            display: block;
+            padding: 9.5px;
+            margin: 0 0 10px;
+            font-size: 13px;
+            line-height: 1.42857143;
+            color: #333;
+            word-break: break-all;
+            word-wrap: break-word;
+            background-color: whiteSmoke;
+            border: 1px solid #CCC;
+            border-radius: 4px;
+        }
+
+        blockquote {
+            padding: 10px 20px;
+            margin: 0 0 20px;
+            font-size: 16.5px;
+            border-left: 8px solid #eee;
+        }
+
+        h1 {
+            text-decoration: underline;
+        }
+
+        #content {
+            margin: auto;
+            width: 600px;
+        }
+    </style>
     <body>
-        <h1>{{title}}</h1>
-        <p>{{date_created}}</p>
-        <p>{{date_modified}}</p>
-        <p>{{{markdown content}}}</p>
+        <div id="content">
+            <h1>{{title}}</h1>
+            <p>Written on {{date_created}}</p>
+            <div>{{{markdown content}}}</div>
+        </div>
     </body>
 </html>

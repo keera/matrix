@@ -17,6 +17,7 @@ var connection = mysql.createConnection({
 });
 
 handlebars.registerHelper("markdown", function(content) {
+  content = content || "";
   return markdown.toHTML(content);
 });
 
@@ -35,31 +36,44 @@ app.get('/', function(req, res) {
 });
 
 app.get('/blog', function(req, res) {
+
   fs.readFile(__dirname + "/blog/templates/archive.html","utf8", function (err, data) {
-      if (err) throw err;
-      var template = handlebars.compile(data);
-      connection.query('SELECT * FROM file WHERE ? AND ? ORDER BY date_created DESC',
-        [{is_published: true}, {
-      user_id: 13
+    if (err) throw err;
+    var template = handlebars.compile(data);
+    connection.query('SELECT * FROM file WHERE ? AND ? ORDER BY date_created DESC',
+      [{
+        is_published: true
+      }, {
+        user_id: 13
       }], function(err, rows) {
         var result = template({files: rows});
         res.status(200).send(result);
-      });
+    });
   });
 });
 
 app.get('/blog/files/:id', function(req, res) {
-  fs.readFile(__dirname + "/blog/templates/file.html","utf8", function (err, data) {
-      if (err) throw err;
-      var template = handlebars.compile(data);
-      connection.query('SELECT * FROM file WHERE ? AND ? AND ?',
-        [{id: req.params.id}, {is_published: true}, {
-      user_id: 13
+  if (req.session.authenticated) {
+    res.redirect("/#file/" + req.params.id + "/view");
+    return;
+  }
+  fs.readFile(__dirname + "/blog/templates/file.html", "utf8", function (err, data) {
+    if (err) throw err;
+    var template = handlebars.compile(data);
+    connection.query('SELECT * FROM file WHERE ? AND ? AND ?',
+      [{
+        id: req.params.id
+      }, {
+        is_published: true
+      }, {
+        user_id: 13
       }], function(err, rows) {
-        console.log(rows);
-        var result = template(rows[0]);
-        res.status(200).send(result);
-      });
+        if (rows.length < 1) {
+          res.status(404).send("Nothing to see here :)");
+          return;
+        }
+        res.status(200).send(template(rows[0]));
+    });
   });
 });
 

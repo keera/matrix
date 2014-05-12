@@ -1,12 +1,25 @@
+<!doctype html>
 <html>
+    <meta charset="utf-8">
+    <title>blog</title>
+    <style type="text/css">
+        body {
+            background-color: gainsboro;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+    </style>
     <body>
-        <h1>Files</h1>
+        <h1>Archive</h1>
         <ul>
             {{#each files}}
-            <li>
-            <h4><a href="http://localhost:3000/blog/files/{{id}}">{{title}}</a></h4>
-            <span>{{date_created}}</span>
-            </li>
+            <li><a href="http://localhost:3000/blog/files/{{id}}">{{title}}</a></li>
             {{/each}}
         </ul>
     </body>
