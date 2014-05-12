@@ -1,6 +1,7 @@
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var session = require("express-session");
+var crypto = require('crypto');
 var async = require("async");
 var mysql = require('mysql');
 var app = express();
@@ -17,6 +18,10 @@ app.use(express.bodyParser());
 app.use(cookieParser());
 app.use(session({secret: 'gggunit', key: 'sid'}));
 app.use(express.static(__dirname + '/app'));
+
+var genSha1Hash = function(val) {
+  return crypto.createHash('sha1').update(val).digest('hex');
+}
 
 app.get('/', function(req, res) {
   res.status(200).sendfile('index.html');
@@ -43,7 +48,7 @@ app.post('/api/signup', function(req, res) {
     }
     connection.query('INSERT INTO user SET ?', {
       username: username,
-      password: password
+      password: genSha1Hash(password)
     }, function(err, result) {
       if (err) {
         res.json(400, {msg: 'Signup failed'});
@@ -79,7 +84,7 @@ app.post('/api/login', function(req, res) {
     [{
       username: username
     }, {
-      password: password
+      password: genSha1Hash(password)
     }], function(err, rows) {
     if (err || !rows.length) {
       res.json(400, {msg: 'Invalid username or password'});
