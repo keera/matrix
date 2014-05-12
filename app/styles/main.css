@@ -106,3 +106,8 @@ body {
 .notification .alert {
     display: none;
 }
+
+.select2-container-multi .select2-choices .select2-search-choice {
+    border-radius: 0;
+    border: 1px solid #24B05F;
+}

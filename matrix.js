@@ -320,7 +320,7 @@ app.put('/api/files/:id', function(req, res) {
               throw err;
             });
           }
-          res.json(200, {msg: "win"});
+          res.json(200);
         });
       });
     });
