@@ -88,6 +88,7 @@ define([
 
     render: function() {
       this.$el.html(this.template({
+        baseUrl: session.getBaseUrl(),
         isAuthenticated: session.isAuthenticated()
       }));
       return this;
