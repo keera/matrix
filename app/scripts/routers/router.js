@@ -28,7 +28,7 @@ define([
         (new dashboardView()).render();
       };
       var failure = function() {
-        this.navigate("about");
+        this.navigate("about", {replace: true});
         this.about();
         return;
       }.bind(this);
