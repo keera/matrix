@@ -7,20 +7,35 @@
             background-color: gainsboro;
         }
 
+        #content {
+            margin: auto;
+            width: 600px;
+        }
+
         ul {
             list-style-type: none;
+            padding: 0px;
         }
 
         ul li {
             margin-bottom: 10px;
         }
+
+        h1, h2 {
+            color: crimson;
+        }
     </style>
     <body>
-        <h1>Archive</h1>
-        <ul>
-            {{#each files}}
-            <li><a href="/file/{{id}}">{{title}}</a></li>
-            {{/each}}
-        </ul>
+        <div id="content">
+            <div id="about">
+                Hey I'm <strong>Alan</strong> and welcome to my <a href="http://motherfuckingwebsite.com/">motherfucking website</a>. This is where I share some of my thoughts. Feel free to say hello at <strong>lingramming {at} gmail.com</strong>!
+            </div>
+            <h2>Files</h2>
+                <ul>
+                    {{#each files}}
+                    <li><a href="/file/{{id}}">{{title}}</a></li>
+                    {{/each}}
+                </ul>
+            </div>
     </body>
 </html>
