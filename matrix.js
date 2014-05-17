@@ -3,6 +3,7 @@ var fs = require('fs');
 var cookieParser = require('cookie-parser');
 var session = require("express-session");
 var crypto = require('crypto');
+var file = require('./models/file');
 var async = require("async");
 var markdown = require("markdown").markdown;
 var handlebars = require("handlebars");
@@ -32,6 +33,13 @@ var genSha1Hash = function(val) {
   return crypto.createHash('sha1').update(val).digest('hex');
 }
 
+app.all("/admin/api/*", function(req, res, next) {
+  if (!req.session.authenticated) {
+      res.json(404, {msg: 'You need to be logged in'});
+      return;
+  }
+  next();
+});
 // Blog archive
 app.get('/', function(req, res) {
   fs.readFile(__dirname + "/blog/templates/archive.html","utf8", function (err, data) {
@@ -80,7 +88,7 @@ app.get('/admin', function(req, res) {
 });
 
 // User authentication
-app.post('/admin/api/signup', function(req, res) {
+app.post('/admin/signup', function(req, res) {
   var username = req.body.username;
   var password = req.body.password;
   // Check if exists first
@@ -88,6 +96,7 @@ app.post('/admin/api/signup', function(req, res) {
     res.json(400, {msg: 'Invalid username or password'});
     return;
   }
+
   connection.query('SELECT * FROM user WHERE username = ?',
     [username], function(err, rows) {
     if (err) {
@@ -113,7 +122,7 @@ app.post('/admin/api/signup', function(req, res) {
   });
 });
 
-app.get('/admin/api/authen', function(req, res) {
+app.get('/admin/authen', function(req, res) {
   if (req.session.authenticated) {
     res.json(200, {msg: 'win'});
     return;
@@ -121,7 +130,7 @@ app.get('/admin/api/authen', function(req, res) {
   res.json(400, {msg: 'fail'});
 });
 
-app.post('/admin/api/login', function(req, res) {
+app.post('/admin/login', function(req, res) {
   if (req.session.authenticated) {
     res.json(200, {msg: 'win'});
     return;
@@ -148,266 +157,47 @@ app.post('/admin/api/login', function(req, res) {
   });
 });
 
-app.post('/admin/api/logout', function(req, res) {
+app.post('/admin/logout', function(req, res) {
   req.session.destroy();
   res.json(200, {success: 'destroyed'});
 });
 
 // Create file
 app.post('/admin/api/files', function(req, res) {
-  /*var newFile = {
-      id: 3,
-      title: "Untitled",
-      content: "",
-      created: "4 days ago",
-      modified: "yesterday",
-      published: false,
-      labels: []
-    };*/
-
-  if (!req.session.authenticated) {
-      res.json(404, {error: 'fail'});
-      return;
-  }
-  connection.query('INSERT INTO file SET ?, date_created = NOW(), date_modified = NOW()', {
-    title: "Untitled",
-    user_id: req.session.user_id
-  }, function(err, result) {
-    if (err) {
-      res.json(404, {error: 'fail'});
-      return;
-    }
-    res.json(200, {id: result.insertId});
-  });
+  file.create(req, res, connection);
 });
-
-var getFileLabels = function(req, res, rows) {
-  var labelQueries = [];
-  var getLabelQueryClosure = function(file) {
-    return function(callback) {
-      var sql = 'SELECT id, title AS name ' +
-        'FROM file_label AS a ' +
-        'JOIN label AS b ON ' +
-        'a.label_id = b.id ' +
-        'WHERE a.file_id = ?';
-      connection.query(sql, [file.id], function(err, rows) {
-        if (err) {
-          res.json(404, {error: 'fail'});
-          return;
-        }
-        // Add labels to file
-        file.labels = rows;
-        callback(null, file);
-      });
-    };
-  };
-  for (var i = 0; i < rows.length; i++) {
-    labelQueries.push(getLabelQueryClosure(rows[i]));
-  };
-  async.parallel(labelQueries, function(err, results) {
-    res.json(200, rows);
-  });
-};
 
 // Query all files
 app.get('/admin/api/files/all', function(req, res) {
-  if (!req.session.authenticated) {
-      res.json(404, {error: 'fail'});
-      return;
-  }
-  var allQuery = 'SELECT * FROM file WHERE user_id = ?';
-  connection.query(allQuery,
-    [req.session.user_id], function(err, rows) {
-    if (err) {
-      res.json(404, {error: 'fail'});
-      return;
-    }
-    getFileLabels(req, res, rows);
-  });
+  file.findAll(req, res, connection);
 });
 
 // Query files
 app.get('/admin/api/files', function(req, res) {
-  if (!req.session.authenticated) {
-      res.json(404, {error: 'fail'});
-      return;
-  }
-  var label = req.query.label_id;
-  var labelSpecific = "SELECT * FROM file AS a " +
-    "JOIN file_label AS b " +
-    "ON a.id = b.file_id " +
-    "WHERE a.user_id = ? AND b.label_id = ?;"
-  connection.query(labelSpecific,
-    [req.session.user_id, label], function(err, rows) {
-    if (err) {
-      res.json(404, {error: 'fail'});
-      return;
-    }
-    getFileLabels(req, res, rows);
-  });
+  file.findByLabel(req, res, connection);
 });
 
 app.get('/admin/api/files/search', function(req, res) {
-  if (!req.session.authenticated) {
-      res.json(404, {error: 'fail'});
-      return;
-  }
-  connection.query('SELECT * FROM file WHERE title LIKE ? AND user_id = ?',
-    ["%" + req.query.q + "%", req.session.user_id], function(err, rows) {
-    if (err) {
-      res.json(404, {error: 'fail'});
-      return;
-    }
-    res.json(200, rows);
-  });
+  file.findByTitle(req, res, connection);
 });
 
 // Get file
 app.get('/admin/api/files/:id', function(req, res) {
-  if (!req.session.authenticated) {
-      res.json(404, {error: 'fail'});
-      return;
-  }
-  // Get file by user
-  connection.query('SELECT * FROM file WHERE ? AND ?',
-    [{
-      id: req.params.id
-    }, {
-      user_id: req.session.user_id
-    }], function(err, rows) {
-    if (err || !rows.length) {
-      res.json(404, {error: 'fail'});
-      return;
-    }
-    var fileResult = rows[0];
-    // Get file labels
-    var sql = 'SELECT id, title AS name ' +
-      'FROM file_label AS a ' +
-      'JOIN label AS b ON ' +
-      'a.label_id = b.id ' +
-      'WHERE a.file_id = ?';
-    connection.query(sql, [fileResult.id], function(err, rows) {
-      if (err) {
-        res.json(404, {error: 'fail'});
-        return;
-      }
-      // Add labels to result
-      fileResult.labels = rows;
-      res.json(200, fileResult);
-    });
-  });
+  file.findById(req, res, connection);
 });
 
 // Update file
 app.put('/admin/api/files/:id', function(req, res) {
-  if (!req.session.authenticated) {
-      res.json(404, {error: 'fail'});
-      return;
-  }
-
-  var fileId = req.body.id;
-  var title = req.body.title;
-  var content = req.body.content;
-  var isPublished = req.body.is_published;
-  var addLabels = req.body.add_labels || [];
-  var deleteLabels = req.body.delete_labels || [];
-
-  connection.beginTransaction(function(err) {
-    if (err) {
-      throw err;
-    }
-    // Update the file
-    var sql = 'UPDATE file SET ? , date_modified = NOW() WHERE ? AND ?';
-    connection.query(sql, [{
-      title: title,
-      content: content,
-      is_published: isPublished
-    }, {
-      id: fileId
-    }, {
-      user_id: req.session.user_id
-    }], function(err, result) {
-      if (err) {
-        connection.rollback(function() {
-          throw err;
-        });
-      }
-      // Update labels
-      async.parallel([
-        // Add labels
-        function(callback) {
-          // If nothing to add
-          if (!addLabels.length) {
-            callback(null, false);
-            return;
-          }
-          var bulkInsertData = addLabels.map(function(val) {
-            return [fileId, val];
-          });
-          var sql = 'INSERT INTO file_label (file_id, label_id) VALUES ?';
-          connection.query(sql, [bulkInsertData], function(err, result) {
-            if (err) {
-              connection.rollback(function() {
-                throw err;
-              });
-            }
-            callback(null, true);
-          });
-        },
-        // Delete labels
-        function(callback) {
-          if (!deleteLabels.length) {
-            callback(null, false);
-            return;
-          }
-          var sql = "DELETE FROM file_label WHERE file_id = ? AND label_id IN ?";
-          var lol = connection.query(sql, [fileId, [deleteLabels]], function(err, result) {
-            if (err) {
-              connection.rollback(function() {
-                throw err;
-              });
-            }
-            callback(null, true);
-          });
-        }
-      ], function(err, results) {
-        connection.commit(function(err) {
-          if (err) {
-            connection.rollback(function() {
-              throw err;
-            });
-          }
-          res.json(200);
-        });
-      });
-    });
-  });
+  file.update(req, res, connection);
 });
 
 // Delete file
 app.del('/admin/api/files/:id', function(req, res) {
-  if (!req.session.authenticated) {
-      res.json(404, {error: 'fail'});
-      return;
-  }
-  var fileId = req.params.id;
-  connection.query("DELETE FROM file WHERE id = ? AND user_id = ?",
-  [fileId, req.session.user_id], function(err, result) {
-    if (err) throw err;
-    if (result.affectedRows > 0) {
-      res.json(200, "Delete file");
-    } else {
-      res.json(404, "Failed to delete");
-    }
-  });
+  file.remove(req, res, connection);
 });
 
 // Create label
 app.post('/admin/api/labels', function(req, res) {
-  if (!req.session.authenticated) {
-      res.json(404, {error: 'fail'});
-      return;
-  }
   var title = req.body.name;
   var description = req.body.description;
   connection.query('INSERT INTO label SET ?, date_created = NOW()', {
@@ -425,10 +215,6 @@ app.post('/admin/api/labels', function(req, res) {
 
 // Query labels
 app.get('/admin/api/labels', function(req, res) {
-  if (!req.session.authenticated) {
-      res.json(404, {error: 'fail'});
-      return;
-  }
   // TODO: Refactor
   if (!req.query.q) {
     req.query.q = "";

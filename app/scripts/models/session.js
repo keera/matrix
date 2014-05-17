@@ -12,7 +12,7 @@ define([
     blogUrl: "http://localhost:3000",
 
     signup: function(username, password, cb) {
-      $.ajax(this.baseUrl + "/api/signup", {
+      $.ajax(this.baseUrl + "/signup", {
         type: "POST",
         data: {
           username: username,
@@ -29,7 +29,7 @@ define([
     // Authen user
     authenticate: function(cb) {
       var that = this;
-      $.ajax(this.baseUrl + "/api/authen", {
+      $.ajax(this.baseUrl + "/authen", {
           success: function() {
             that.isLoggedin = true;
             cb.success();
@@ -54,7 +54,7 @@ define([
     },
 
     login: function(username, password, cb) {
-      $.ajax(this.baseUrl + "/api/login", {
+      $.ajax(this.baseUrl + "/login", {
           type: "POST",
           data: {
             username: username,
@@ -72,7 +72,7 @@ define([
     },
 
     logout: function(cb) {
-      $.ajax(this.baseUrl + "/api/logout", {
+      $.ajax(this.baseUrl + "/logout", {
           type: "POST",
           success: function() {
             cb.success();
