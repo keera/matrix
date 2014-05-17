@@ -12,7 +12,7 @@ I really like the Stackoverflow editor and I'm not ashamed to say that I set out
 
 ##### Relational
 
-When I think about ideas, I think about them in context of other ideas. I see relationships. Therefore, as I'm writing, I'm constantly making connections between ideas. Since writing is an extension of my thought, my writing tool should allow me to concretely associate a piece of content in a file with another file (connection) as well as group related files under topics (abstraction). Matrix allows me to do both easily using fast-(hyper)linking (creates a hyperlink to an existing file with a short key combo) and file labeling (tagging).
+Language in thought is abstract. You think in terms of symbols and their relationships with each other. Since writing is an extension of my thought, my writing tool should also allow me to represent abstractions. I should be able to relate or connect content with other content as well as group or generalize them by their similarities. Matrix allows me to do both easily using fast-(hyper)linking (creates a hyperlink in a file to another file with a short key combo) and file labeling (tagging).
 
 ##### Stack
 
