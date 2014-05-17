@@ -15,10 +15,10 @@ app.use(session({secret: 'gunit', key: 'sid'}));
 app.use('/admin', express.static(__dirname + '/app'));
 
 var connection = mysql.createConnection({
-  host: 'localhost',
-  database: 'matrix',
-  user: 'root',
-  password: 'root'
+  host: process.env.DBHOST || 'localhost',
+  database: process.env.DB || 'matrix',
+  user: process.env.DBUSER || 'root',
+  password: process.env.DBPASS || 'root'
 });
 
 app.all("/admin/api/*", function(req, res, next) {
