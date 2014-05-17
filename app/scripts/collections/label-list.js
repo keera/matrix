@@ -13,7 +13,7 @@ define([
 
   Labellist.getIds = function(labels) {
     return _.filter(labels, function(val) {
-      return val !== '';
+      return val !== "";
     }).map(function(val) {
       return (val.id) ? +val.id : +val;
     });

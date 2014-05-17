@@ -49,8 +49,8 @@ define([
     },
 
     signup: function() {
-      var username = this.$('#signup-modal .username').val();
-      var password = this.$('#signup-modal .password').val();
+      var username = this.$("#signup-modal .username").val();
+      var password = this.$("#signup-modal .password").val();
       var notificationEl = this.$("#signup-notification");
       if (this.signupValidation.isValid({
         "username": username,
@@ -72,8 +72,8 @@ define([
     },
 
     login: function() {
-      var username = this.$('#login-modal .username').val();
-      var password = this.$('#login-modal .password').val();
+      var username = this.$("#login-modal .username").val();
+      var password = this.$("#login-modal .password").val();
       var notificationEl = this.$("#login-notification");
       if (this.loginValidation.isValid({
         "username": username,

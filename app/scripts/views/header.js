@@ -39,12 +39,12 @@ define([
     },
 
     updateNav: function(current) {
-      $('.navbar-nav li')
-        .removeClass('active')
+      $(".navbar-nav li")
+        .removeClass("active")
         .filter(function() {
-          return $(this).children().attr('class') == current;
+          return $(this).children().attr("class") == current;
         })
-        .addClass('active');
+        .addClass("active");
     },
 
     updateAbout: function() {

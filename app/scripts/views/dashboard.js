@@ -79,7 +79,7 @@ define([
       var selectedLabel = this.labelCollection.findWhere({
         "name": linkText
       });
-      if (linkText === 'All' || !selectedLabel) {
+      if (linkText === "All" || !selectedLabel) {
         this.fileCollection.fetchAll();
         return;
       }

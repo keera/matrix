@@ -24,10 +24,10 @@ define([
     template: Handlebars.compile(editTemplate),
 
     initialize: function() {
-      Mousetrap.bind('mod+s', _.bind(this.save, this));
-      Mousetrap.bind('mod+c', _.bind(this.formatCode, this));
-      Mousetrap.bind('mod+b', _.bind(this.boldText, this));
-      Mousetrap.bind('mod+l', _.bind(this.linkText, this));
+      Mousetrap.bind("mod+s", _.bind(this.save, this));
+      Mousetrap.bind("mod+c", _.bind(this.formatCode, this));
+      Mousetrap.bind("mod+b", _.bind(this.boldText, this));
+      Mousetrap.bind("mod+l", _.bind(this.linkText, this));
       this.model.fetch({
         success: _.bind(this.render, this)
       });
@@ -53,7 +53,7 @@ define([
       var format = function(item) {
         return item.name;
       };
-      this.$('#labels').select2({
+      this.$("#labels").select2({
         multiple: true,
         width: "copy",
         ajax: {
@@ -70,7 +70,7 @@ define([
         formatSelection: format
       });
       // Set existing labels
-      this.$('#labels').select2('data', this.model.get('labels'));
+      this.$("#labels").select2("data", this.model.get("labels"));
     },
 
     setupFileSearch: function() {
@@ -128,15 +128,15 @@ define([
     },
 
     hideModal: function(e) {
-      this.$('#urlModal').modal('hide');
+      this.$("#urlModal").modal("hide");
     },
 
     linkText: function(e) {
       e.preventDefault();
       var that = this;
-      this.$('#urlModal')
-        .modal('show')
-        .one('hidden.bs.modal', function (e) {
+      this.$("#urlModal")
+        .modal("show")
+        .one("hidden.bs.modal", function (e) {
         that.replaceText("[","](" + that.$("#url").val() + ")");
       });
     },
@@ -168,10 +168,10 @@ define([
       var notificationEl = this.$(".notification");
 
       var newLabelIds = labelList.getIds(labelsEl.val().split(","));
-      var oldLabelIds = labelList.getIds(this.model.get('labels'));
+      var oldLabelIds = labelList.getIds(this.model.get("labels"));
       var content = textareaEl.val();
       var title = titleEl.val();
-      var newLabels = this.$('#labels').select2('data');
+      var newLabels = this.$("#labels").select2("data");
 
       var attr = {
         title: title,
@@ -184,14 +184,14 @@ define([
       this.model.save(attr, {
         wait: true,
         success: function(model) {
-          var notificationSuccessEl = notificationEl.find('.alert-success');
+          var notificationSuccessEl = notificationEl.find(".alert-success");
           notificationSuccessEl.slideDown();
           setTimeout(function() {
             notificationSuccessEl.slideUp();
           }, 1000);
         },
         error: function(model) {
-          var notificationErrorEl = notificationEl.find('.alert-danger');
+          var notificationErrorEl = notificationEl.find(".alert-danger");
           notificationErrorEl.slideDown();
           setTimeout(function() {
             notificationErrorEl.slideUp();

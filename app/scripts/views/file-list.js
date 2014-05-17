@@ -16,9 +16,9 @@ define([
     template: Handlebars.compile(filelistTemplate),
 
     initialize: function() {
-      this.listenTo(this.collection, 'reset', this.render);
-      this.listenTo(this.collection, 'change', this.render);
-      this.listenTo(this.collection, 'add', this.render);
+      this.listenTo(this.collection, "reset", this.render);
+      this.listenTo(this.collection, "change", this.render);
+      this.listenTo(this.collection, "add", this.render);
       this.collection.fetch({reset: true});
       Handlebars.registerHelper("formatDatetime", function(datetime) {
         return moment(datetime).fromNow();

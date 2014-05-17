@@ -14,8 +14,8 @@ define([
     template: Handlebars.compile(dashboardsidebarTemplate),
 
     initialize: function() {
-      this.listenTo(this.collection, 'reset', this.render);
-      this.listenTo(this.collection, 'add', this.render);
+      this.listenTo(this.collection, "reset", this.render);
+      this.listenTo(this.collection, "add", this.render);
       this.collection.fetch({reset: true});
       setInterval(_.bind(this.collection.fetch, this.collection), 10000);
     },
