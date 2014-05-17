@@ -60,7 +60,7 @@ define([
           url: session.getBaseUrl() + "/api/labels",
           dataType: "json",
           data: function(term, page) {
-            return {q: term}
+            return {q: term};
           },
           results: function(data, page) {
             return {results: data, text:"name"};
@@ -85,7 +85,7 @@ define([
           url: session.getBaseUrl() + "/api/files/search",
           dataType: "json",
           data: function(term, page) {
-            return {q: term}
+            return {q: term};
           },
           results: function(term, page) {
             return {results: term, text: "title"};
@@ -147,7 +147,9 @@ define([
     },
 
     preview: function() {
-      if (!this.previewOn) return;
+      if (!this.previewOn) {
+        return;
+      }
       var previewEl = this.$("#editing-preview");
       var previewContentEl = previewEl.find(".panel-body");
       var textareaEl = this.$("textarea");
