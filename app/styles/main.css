@@ -37,6 +37,9 @@ body {
     border: solid #000;
 }
 
+#content {
+    margin-bottom: 100px;
+}
 .navbar-inverse .navbar-brand {
     color: #24b05f;
     font-weight: bold;
@@ -120,3 +123,5 @@ body {
     font-weight: bold;
     color: #428BCA;
 }
+
+

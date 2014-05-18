@@ -30,10 +30,6 @@ var index = function(req, res, conn) {
 
 // File
 var getFile = function(req, res, conn) {
-  if (req.session.authenticated) {
-    res.redirect("/admin/#file/" + req.params.id + "/view");
-    return;
-  }
   fs.readFile(blogPath + "/file.html", "utf8", function (err, data) {
     if (err) throw err;
     var template = handlebars.compile(data);
