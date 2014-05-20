@@ -106,6 +106,13 @@ body {
     display: none;
 }
 
+.notification {
+    position: absolute;
+    z-index: 3;
+    width: 100%;
+    padding-right: 30px; /* col-lg offset */
+}
+
 .notification .alert {
     display: none;
 }

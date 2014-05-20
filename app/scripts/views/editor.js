@@ -25,9 +25,11 @@ define([
 
     initialize: function() {
       Mousetrap.bind("mod+s", _.bind(this.save, this));
-      Mousetrap.bind("mod+c", _.bind(this.formatCode, this));
       Mousetrap.bind("mod+b", _.bind(this.boldText, this));
+      Mousetrap.bind("mod+i", _.bind(this.italicizeText, this));
       Mousetrap.bind("mod+l", _.bind(this.linkText, this));
+      Mousetrap.bind("mod+shift+c", _.bind(this.formatCodeBlock, this));
+      Mousetrap.bind("mod+shift+x", _.bind(this.formatCodeInline, this));
       this.model.fetch({
         success: _.bind(this.render, this)
       });
@@ -113,7 +115,7 @@ define([
       oMsgInput.focus();
     },
 
-    formatCode: function(e) {
+    formatCodeBlock: function(e) {
       e.preventDefault();
       this.replaceText("", "", function(text) {
         return text.split("\n").map(function(line) {
@@ -122,9 +124,19 @@ define([
       });
     },
 
+    formatCodeInline: function(e) {
+      e.preventDefault();
+      this.replaceText("`", "`");
+    },
+
     boldText: function(e) {
       e.preventDefault();
       this.replaceText("**", "**");
+    },
+
+    italicizeText: function(e) {
+      e.preventDefault();
+      this.replaceText("*", "*");
     },
 
     hideModal: function(e) {
