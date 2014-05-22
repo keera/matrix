@@ -40,8 +40,8 @@ define([
     events: {
       "click a.show-preview": "openPreview",
       "click a.hide-preview": "closePreview",
+      "keyup textarea": "updatePreviewAndAutoSave",
       "click #urlModal button": "hideModal",
-      "keyup textarea": "updatePreviewAndSave",
       "click #save": "save"
     },
 
@@ -177,7 +177,7 @@ define([
       this.saveTimerId = setTimeout(_.bind(this.save, this), 1000);
     },
 
-    updatePreviewAndSave: function() {
+    updatePreviewAndAutoSave: function() {
       this.updatePreview();
       this.autoSave();
     },
