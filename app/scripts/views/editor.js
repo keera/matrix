@@ -34,13 +34,14 @@ define([
         success: _.bind(this.render, this)
       });
       this.previewOn = false;
+      this.saveTimerId = null;
     },
 
     events: {
       "click a.show-preview": "openPreview",
       "click a.hide-preview": "closePreview",
       "click #urlModal button": "hideModal",
-      "keyup textarea": "preview",
+      "keyup textarea": "updatePreviewAndSave",
       "click #save": "save"
     },
 
@@ -155,10 +156,10 @@ define([
 
     openPreview: function() {
       this.previewOn = true;
-      this.preview();
+      this.updatePreview();
     },
 
-    preview: function() {
+    updatePreview: function() {
       if (!this.previewOn) {
         return;
       }
@@ -169,13 +170,27 @@ define([
       previewEl.slideDown(400);
     },
 
+    autoSave: function() {
+      if (this.saveTimerId) {
+        clearTimeout(this.saveTimerId);
+      }
+      this.saveTimerId = setTimeout(_.bind(this.save, this), 1000);
+    },
+
+    updatePreviewAndSave: function() {
+      this.updatePreview();
+      this.autoSave();
+    },
+
     closePreview: function() {
       this.previewOn = false;
       this.$("#editing-preview").slideUp(400);
     },
 
     save: function(e) {
-      e.preventDefault();
+      if (e) {
+        e.preventDefault();
+      }
       var labelsEl = this.$("#labels");
       var textareaEl = this.$("textarea");
       var titleEl = this.$("#title");
