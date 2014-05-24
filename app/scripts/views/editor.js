@@ -28,6 +28,7 @@ define([
       Mousetrap.bind("mod+b", _.bind(this.boldText, this));
       Mousetrap.bind("mod+i", _.bind(this.italicizeText, this));
       Mousetrap.bind("mod+l", _.bind(this.linkText, this));
+      Mousetrap.bind("tab", _.bind(this.indentText, this));
       Mousetrap.bind("mod+shift+c", _.bind(this.formatCodeBlock, this));
       Mousetrap.bind("mod+shift+x", _.bind(this.formatCodeInline, this));
       this.model.fetch({
@@ -105,9 +106,7 @@ define([
         nSelEnd = oMsgInput.selectionEnd,
         sOldText = oMsgInput.value,
         sHighlightedText = sOldText.substring(nSelStart, nSelEnd);
-      if (cb) {
-        sHighlightedText = cb(sHighlightedText);
-      }
+        sHighlightedText = (cb) ? cb(sHighlightedText) : sHighlightedText;
       oMsgInput.value = sOldText.substring(0, nSelStart) +
         sStartTag + sHighlightedText + sEndTag +
         sOldText.substring(nSelEnd);
@@ -116,18 +115,28 @@ define([
       oMsgInput.focus();
     },
 
+    getSpacerClosure: function(numSpaces) {
+      return function(text) {
+        var spaces = new Array(numSpaces + 1).join(" ");
+        return text.split("\n").map(function(line) {
+          return spaces + line;
+        }).join("\n");
+      };
+    },
+
     formatCodeBlock: function(e) {
       e.preventDefault();
-      this.replaceText("", "", function(text) {
-        return text.split("\n").map(function(line) {
-          return "    " + line;
-        }).join("\n");
-      });
+      this.replaceText("", "", this.getSpacerClosure(4));
     },
 
     formatCodeInline: function(e) {
       e.preventDefault();
       this.replaceText("`", "`");
+    },
+
+    indentText: function(e) {
+      e.preventDefault();
+      this.replaceText("", "", this.getSpacerClosure(2));
     },
 
     boldText: function(e) {
