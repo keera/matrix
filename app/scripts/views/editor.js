@@ -124,6 +124,15 @@ define([
       };
     },
 
+    getAnimatorClosure: function(el) {
+      return function(model) {
+        el.slideDown();
+        setTimeout(function() {
+          el.slideUp();
+        }, 1000);
+      };
+    },
+
     formatCodeBlock: function(e) {
       e.preventDefault();
       this.replaceText("", "", this.getSpacerClosure(4));
@@ -183,7 +192,9 @@ define([
       if (this.saveTimerId) {
         clearTimeout(this.saveTimerId);
       }
-      this.saveTimerId = setTimeout(_.bind(this.save, this), 1000);
+      this.saveTimerId = setTimeout(_.bind(
+        this.save, this,
+        null, true), 10000);
     },
 
     updatePreviewAndAutoSave: function() {
@@ -196,7 +207,7 @@ define([
       this.$("#editing-preview").slideUp(400);
     },
 
-    save: function(e) {
+    save: function(e, noAlert) {
       if (e) {
         e.preventDefault();
       }
@@ -219,23 +230,19 @@ define([
         delete_labels: labelList.getDeleted(oldLabelIds, newLabelIds)
       };
 
-      this.model.save(attr, {
+      var options = {
         wait: true,
-        success: function(model) {
-          var notificationSuccessEl = notificationEl.find(".alert-success");
-          notificationSuccessEl.slideDown();
-          setTimeout(function() {
-            notificationSuccessEl.slideUp();
-          }, 1000);
-        },
-        error: function(model) {
-          var notificationErrorEl = notificationEl.find(".alert-danger");
-          notificationErrorEl.slideDown();
-          setTimeout(function() {
-            notificationErrorEl.slideUp();
-          }, 1000);
-        }
-      });
+      };
+
+      // First param a workaround for mousetrap combo arg
+      if (typeof noAlert === "string" || !noAlert) {
+        var successAlertEl = notificationEl.find(".alert-success");
+        var errorAlertEl = notificationEl.find(".alert-danger");
+        options.success = this.getAnimatorClosure(successAlertEl);
+        options.error = this.getAnimatorClosure(errorAlertEl);
+      }
+
+      this.model.save(attr, options);
     },
 
     render: function() {
