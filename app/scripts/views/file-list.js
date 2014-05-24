@@ -37,10 +37,18 @@ define([
 
     deleteFile: function(ev) {
       var linkEl = this.$(ev.target);
-      linkEl.parents("tr").fadeOut(300);
-      this.collection
+      var confirmEl = this.$("#confirm-modal .confirm");
+      var noConfirmEl = this.$("#confirm-modal .no-confirm");
+      confirmEl.one("click", _.bind(function() {
+        noConfirmEl.off("click");
+        linkEl.parents("tr").fadeOut(300);
+        this.collection
         .get(linkEl.data("id"))
         .destroy({wait: true});
+      }, this));
+      noConfirmEl.one("click", function() {
+        confirmEl.off("click");
+      });
     },
 
     togglePublish: function(ev) {

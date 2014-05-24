@@ -37,7 +37,7 @@
                         <ul class="dropdown-menu">
                             <li><a class="edit-file" href="#file/{{id}}/edit" target="_blank">Edit</a></li>
                             <li><a class="view-file" href="#file/{{id}}/view" target="_blank">View</a></li>
-                            <li><a class="delete-file" data-id="{{id}}">Delete</a></li>
+                            <li><a class="delete-file" data-toggle="modal" data-target="#confirm-modal" data-id="{{id}}">Delete</a></li>
                             {{#if is_published}}
                             <li><a class="toggle-publish" data-id="{{id}}">Unpublish</a></li>
                             {{else}}
@@ -55,3 +55,15 @@
     {{/if}}
 </div>
 
+<!--Delete confirmation modal--> 
+<div id="confirm-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <h4 class="modal-title" id="myModalLabel">Are you sure you want to delete?</h4>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary confirm" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-default no-confirm" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
