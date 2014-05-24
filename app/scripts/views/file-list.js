@@ -43,8 +43,8 @@ define([
         noConfirmEl.off("click");
         linkEl.parents("tr").fadeOut(300);
         this.collection
-        .get(linkEl.data("id"))
-        .destroy({wait: true});
+          .get(linkEl.data("id"))
+          .destroy({wait: true});
       }, this));
       noConfirmEl.one("click", function() {
         confirmEl.off("click");
