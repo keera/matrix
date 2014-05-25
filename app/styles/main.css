@@ -1,5 +1,5 @@
 body {
-    background: #fafafa;
+    background-color: lavender;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #333;
 }
@@ -26,10 +26,6 @@ body {
     background: #ccc;
     color: #000;
     padding: 0.2em 0;
-}
-
-body {
-    background-image: url("http://www.icedgraphics.com/wp-content/uploads/2012/02/grey-background.jpg");
 }
 
 .jumbotron {
@@ -129,6 +125,10 @@ body {
 #header-label {
     font-weight: bold;
     color: #428BCA;
+}
+
+.nav-stacked > li {
+    float: left;
 }
 
 
