@@ -57,6 +57,7 @@ define([
 
     createLabel: function() {
       // Grab info, validate
+      var modalEl = $("#new-label-modal");
       var title = $("#new-label-modal input[type=text]").val();
       var description = $("#new-label-modal textarea").val();
       var newLabel = new labelModel();
@@ -65,14 +66,12 @@ define([
         description: description
       }, {
         success: function() {
-          alert("label saved");
+          modalEl.modal("hide");
         },
         error: function() {
           alert("label not saved");
         }
       });
-      // $("#new-label-modal").modal("hide");
-      // save and close modal
     },
 
     logout: function() {

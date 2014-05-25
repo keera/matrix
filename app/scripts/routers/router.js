@@ -2,6 +2,7 @@
 
 define([
   "backbone",
+  "underscore",
   "views/header",
   "models/file",
   "models/session",
@@ -9,8 +10,10 @@ define([
   "views/file",
   "views/dashboard",
   "views/about"
-], function(Backbone, headerView, fileModel, session,
+], function(Backbone, _, headerView, fileModel, session,
   editorView, fileView, dashboardView, aboutView) {
+
+  session = session.getSession();
 
   var appRouter = Backbone.Router.extend({
 
@@ -21,33 +24,45 @@ define([
       "about": "about"
     },
 
+    navigateToAbout: function() {
+      this.navigate("about", {replace: true});
+      this.about();
+    },
+
     main: function() {
-      // Check authentication
-      var success = function() {
-        (new headerView()).render();
-        (new dashboardView()).render();
-      };
-      var failure = function() {
-        this.navigate("about", {replace: true});
-        this.about();
-        return;
-      }.bind(this);
-      session.getSession().authenticate({
-        success: success,
-        failure: failure
+      session.authenticate({
+        success: function() {
+          (new headerView()).render();
+          (new dashboardView()).render();
+        },
+        failure: _.bind(function() {
+          this.navigateToAbout();
+        }, this)
       });
     },
 
     view: function(id) {
-      (new headerView()).render();
-      var m = new fileModel({id: id});
-      (new fileView({model: m}).render());
+      session.authenticate({
+        success: function() {
+          (new headerView()).render();
+          (new fileView({model: new fileModel({id: id})}).render());
+        },
+        failure: _.bind(function() {
+          this.navigateToAbout();
+        }, this)
+      });
     },
 
     edit: function(id) {
-      (new headerView()).render();
-      var m = new fileModel({id: id});
-      (new editorView({model: m}).render());
+      session.authenticate({
+        success: function() {
+          (new headerView()).render();
+          (new editorView({model: new fileModel({id: id})}).render());
+        },
+        failure: _.bind(function() {
+          this.navigateToAbout();
+        }, this)
+      });
     },
 
     about: function() {
