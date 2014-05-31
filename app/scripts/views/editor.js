@@ -35,7 +35,7 @@ define([
       this.model.fetch({
         success: _.bind(this.render, this)
       });
-      this.previewOn = false;
+      this.previewVisible = false;
       this.saveTimerId = null;
     },
 
@@ -200,12 +200,12 @@ define([
     },
 
     openPreview: function() {
-      this.previewOn = true;
+      this.previewVisible = true;
       this.updatePreview();
     },
 
     updatePreview: function() {
-      if (!this.previewOn) {
+      if (!this.previewVisible) {
         return;
       }
       var previewEl = this.$("#editing-preview");
@@ -230,7 +230,7 @@ define([
     },
 
     closePreview: function() {
-      this.previewOn = false;
+      this.previewVisible = false;
       this.$("#editing-preview").slideUp(400);
     },
 
