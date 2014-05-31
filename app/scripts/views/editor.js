@@ -182,7 +182,7 @@ define([
 
     italicizeText: function(e) {
       e.preventDefault();
-      this.replaceText("*", "*");
+      this.replaceText("_", "_");
     },
 
     hideModal: function(e) {
