@@ -135,3 +135,12 @@ img {
     border: 1px solid #000;
 }
 
+// https://github.com/twbs/bootstrap/issues/9855
+.modal{
+    overflow-y: auto;
+}
+
+.modal-open{
+    overflow:auto;
+    overflow-x:hidden;
+}
