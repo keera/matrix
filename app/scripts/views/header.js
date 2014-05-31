@@ -85,10 +85,11 @@ define([
       });
     },
 
-    render: function() {
+    render: function(currPage) {
       this.$el.html(this.template({
         baseUrl: session.getBaseUrl(),
-        isAuthenticated: session.isAuthenticated()
+        isAuthenticated: session.isAuthenticated(),
+        isEditPage: currPage === "edit"
       }));
       return this;
     }

@@ -32,7 +32,7 @@ define([
     main: function() {
       session.authenticate({
         success: function() {
-          (new headerView()).render();
+          (new headerView()).render("main");
           (new dashboardView()).render();
         },
         failure: _.bind(function() {
@@ -44,7 +44,7 @@ define([
     view: function(id) {
       session.authenticate({
         success: function() {
-          (new headerView()).render();
+          (new headerView()).render("view");
           (new fileView({model: new fileModel({id: id})}).render());
         },
         failure: _.bind(function() {
@@ -56,7 +56,7 @@ define([
     edit: function(id) {
       session.authenticate({
         success: function() {
-          (new headerView()).render();
+          (new headerView()).render("edit");
           (new editorView({model: new fileModel({id: id})}).render());
         },
         failure: _.bind(function() {
@@ -66,7 +66,7 @@ define([
     },
 
     about: function() {
-      (new headerView()).render();
+      (new headerView()).render("about");
       (new aboutView()).render();
     }
   });

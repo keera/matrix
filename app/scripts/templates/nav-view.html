@@ -14,6 +14,9 @@
             <li><a class="about" href="{{baseUrl}}/#about">About</a></li>
             <li><button type="button" class="btn btn-primary navbar-btn new-file">New file</button></li>
             <li><button type="button" class="btn btn-primary navbar-btn new-label">New label</button></li>
+            {{#if isEditPage}}
+            <li><button type="button" class="btn btn-info navbar-btn" data-toggle="modal" data-target="#editor-help-modal"><span class="glyphicon glyphicon-question-sign"></span> Help</button></li>
+            {{/if}}
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a class="logout" href="#">Logout</a></li>
@@ -36,4 +39,59 @@
         </div>
     </div>
 </div>
+<!--Editor help modal-->
+<div class="modal fade" id="editor-help-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Help</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Key combo</th>
+                            <th>Result</th>
+                        </tr>
+                        <tr>
+                            <td>Bold</td>
+                            <td>ctrl+b</td>
+                            <td>**bold**</td>
+                        </tr>
+                        <tr>
+                            <td>Italicize</td>
+                            <td>ctrl+i</td>
+                            <td>_italicize_</td>
+                        </tr>
+                        <tr>
+                            <td>Create hyperlink*</td>
+                            <td>ctrl+l</td>
+                            <td>[text](link)</td>
+                        </tr>
+                        <tr>
+                            <td>Format code block</td>
+                            <td>ctrl+shift+c</td>
+                            <td>____code</td>
+                        </tr>
+                        <tr>
+                            <td>Format inline code</td>
+                            <td>ctrl+shift+i</td>
+                            <td>`code`</td>
+                        </tr>
+                        <tr>
+                            <td>Format as bullet list</td>
+                            <td>ctrl+shift+l</td>
+                            <td><p>* list item</p><p>* another item</p></td>
+                        </tr>
+                    </thead>
+                </table>
+                <p>* If it's an image, append an exclamation point "!" to the front so it looks like ![text]...</p>
+                <p>* Hyperlinking will automatically open document search. If you want to link to an external resource just hit enter without searching for a document</p>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 
