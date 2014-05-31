@@ -31,6 +31,7 @@ define([
       Mousetrap.bind("tab", _.bind(this.indentText, this));
       Mousetrap.bind("mod+shift+c", _.bind(this.formatCodeBlock, this));
       Mousetrap.bind("mod+shift+x", _.bind(this.formatCodeInline, this));
+      Mousetrap.bind("mod+shift+l", _.bind(this.formatList, this));
       this.model.fetch({
         success: _.bind(this.render, this)
       });
@@ -47,6 +48,7 @@ define([
     },
 
     postInitialize: function() {
+      // Setup searching
       this.setupLabelSearch();
       this.setupFileSearch();
       // select2 issue #1436
@@ -54,10 +56,11 @@ define([
     },
 
     setupLabelSearch: function() {
+      var labelsEl = this.$("#labels");
       var format = function(item) {
         return item.name;
       };
-      this.$("#labels").select2({
+      labelsEl.select2({
         multiple: true,
         width: "copy",
         ajax: {
@@ -67,14 +70,17 @@ define([
             return {q: term};
           },
           results: function(data, page) {
-            return {results: data, text:"name"};
+            return {
+              results: data,
+              text: "name"
+            };
           }
         },
         formatResult: format,
         formatSelection: format
       });
       // Set existing labels
-      this.$("#labels").select2("data", this.model.get("labels"));
+      labelsEl.select2("data", this.model.get("labels"));
     },
 
     setupFileSearch: function() {
@@ -92,7 +98,10 @@ define([
             return {q: term};
           },
           results: function(term, page) {
-            return {results: term, text: "title"};
+            return {
+              results: term,
+              text: "title"
+            };
           }
         },
         formatSelection: format,
@@ -115,11 +124,10 @@ define([
       oMsgInput.focus();
     },
 
-    getSpacerClosure: function(numSpaces) {
+    getLineFormatClosure: function(iterator) {
       return function(text) {
-        var spaces = new Array(numSpaces + 1).join(" ");
         return text.split("\n").map(function(line) {
-          return spaces + line;
+          return iterator(line);
         }).join("\n");
       };
     },
@@ -135,7 +143,12 @@ define([
 
     formatCodeBlock: function(e) {
       e.preventDefault();
-      this.replaceText("", "", this.getSpacerClosure(4));
+      this.replaceText("", "",
+        this.getLineFormatClosure(function(line) {
+          // 4 spaces
+          return "    " + line;
+        })
+      );
     },
 
     formatCodeInline: function(e) {
@@ -143,9 +156,23 @@ define([
       this.replaceText("`", "`");
     },
 
+    formatList: function(e) {
+      e.preventDefault();
+      this.replaceText("", "",
+        this.getLineFormatClosure(function(line) {
+          return "* " + line;
+        })
+      );
+    },
+
     indentText: function(e) {
       e.preventDefault();
-      this.replaceText("", "", this.getSpacerClosure(2));
+      this.replaceText("", "",
+        this.getLineFormatClosure(function(line) {
+          // 2 spaces
+          return "  " + line;
+        })
+      );
     },
 
     boldText: function(e) {
