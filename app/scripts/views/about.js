@@ -12,6 +12,7 @@ define([
   session = session.getSession();
 
   var About = Backbone.View.extend({
+
     el: "#content",
 
     template: Handlebars.compile(aboutTemplate),
@@ -20,7 +21,7 @@ define([
       "click #dashboard-sidebar a": "updateFilelist",
       "click #login-modal #login": "login",
       "keydown": "login",
-      "click #signup-modal #signup": "signup",
+      "click #signup-modal #signup": "signup"
     },
 
     initialize: function() {
