@@ -24,7 +24,10 @@ define([
     template: Handlebars.compile(editTemplate),
 
     initialize: function() {
+      // mod is a generic helper that sets cross platform shortcut
+      // maps to cmd for Mac and ctrl for Windows and Linux
       Mousetrap.bind("mod+s", _.bind(this.save, this));
+      Mousetrap.bind("mod+h", _.bind(this.highlightTitle, this));
       Mousetrap.bind("mod+b", _.bind(this.boldText, this));
       Mousetrap.bind("mod+i", _.bind(this.italicizeText, this));
       Mousetrap.bind("mod+l", _.bind(this.linkText, this));
@@ -51,6 +54,7 @@ define([
       // Setup searching
       this.setupLabelSearch();
       this.setupFileSearch();
+      this.$("textarea").focus();
       // select2 issue #1436
       $.fn.modal.Constructor.prototype.enforceFocus = function() {};
     },
@@ -213,6 +217,11 @@ define([
       var textareaEl = this.$("textarea");
       previewContentEl.html(Markdown.toHTML(textareaEl.val()));
       previewEl.slideDown(400);
+    },
+
+    highlightTitle: function(e) {
+      e.preventDefault();
+      this.$("#title").select();
     },
 
     autoSave: function() {
