@@ -144,3 +144,7 @@ img {
     overflow:auto;
     overflow-x:hidden;
 }
+
+#preview-modal .modal-content {
+    padding: 25px;
+}

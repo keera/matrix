@@ -10,13 +10,10 @@ define([
 
   var File = Backbone.View.extend({
 
-    el: "#content",
-
     template: Handlebars.compile(fileTemplate),
 
     initialize: function() {
       this.listenTo(this.model, "change", this.render);
-      this.model.fetch();
       Handlebars.registerHelper("markdown", function(content) {
         return Markdown.toHTML(content);
       });

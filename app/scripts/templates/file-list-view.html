@@ -36,7 +36,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="edit-file" href="#file/{{id}}/edit" target="_blank">Edit</a></li>
-                            <li><a class="view-file" href="#file/{{id}}/view" target="_blank">View</a></li>
+                            <li><a class="view-file" data-id="{{id}}">View</a></li>
                             <li><a class="delete-file" data-toggle="modal" data-target="#confirm-modal" data-id="{{id}}">Delete</a></li>
                             {{#if is_published}}
                             <li><a class="toggle-publish" data-id="{{id}}">Unpublish</a></li>
@@ -54,7 +54,6 @@
     <div class="alert alert-warning">No files here!</div>
     {{/if}}
 </div>
-
 <!--Delete confirmation modal--> 
 <div id="confirm-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -67,3 +66,11 @@
         </div>
     </div>
 </div>
+<!--File preview modal-->
+<div id="preview-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+

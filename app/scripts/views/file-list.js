@@ -4,10 +4,11 @@ define([
   "backbone",
   "underscore",
   "handlebars",
+  "views/file",
   "text!templates/file-list-view.html",
   "moment"
-], function(Backbone, _, Handlebars, filelistTemplate,
-  moment) {
+], function(Backbone, _, Handlebars, fileView,
+  filelistTemplate, moment) {
 
   var Filelist = Backbone.View.extend({
 
@@ -32,7 +33,21 @@ define([
 
     events: {
       "click .delete-file": "deleteFile",
-      "click .toggle-publish": "togglePublish"
+      "click .toggle-publish": "togglePublish",
+      "click .view-file": "viewFile"
+    },
+
+    viewFile: function(ev) {
+      var linkEl = this.$(ev.target);
+      var modalEl = this.$("#preview-modal");
+      modalEl
+        .find(".modal-content")
+        .html(
+          new fileView({
+            model: this.collection.get(linkEl.data("id"))
+          }).render().el
+        );
+      modalEl.modal("show");
     },
 
     deleteFile: function(ev) {
