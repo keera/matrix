@@ -19,7 +19,8 @@ define([
     events: {
       "click #dashboard-sidebar a": "updateFilelist",
       "click #login-modal #login": "login",
-      "click #signup-modal #signup": "signup"
+      "keydown": "login",
+      "click #signup-modal #signup": "signup",
     },
 
     initialize: function() {
@@ -71,7 +72,10 @@ define([
       }
     },
 
-    login: function() {
+    login: function(e) {
+      if (e.keyCode && e.keyCode != "13") {
+          return;
+      }
       var username = this.$("#login-modal .username").val();
       var password = this.$("#login-modal .password").val();
       var notificationEl = this.$("#login-notification");
