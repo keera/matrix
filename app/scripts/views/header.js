@@ -33,7 +33,7 @@ define([
       file.save({}, {
         success: function(model, response, options) {
           var modelId = model.get("id");
-          window.open(session.getBaseUrl() + "/#file/" + modelId + "/edit", "_blank");
+          window.open(session.getBaseUrl() + "/#file/" + modelId + "/edit");
         }
       });
     },
