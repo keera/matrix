@@ -39,7 +39,7 @@ define([
       };
       this.$("#file-search").select2({
         id: function(obj) {
-          return session.getBaseUrl() + "/#file/" + obj.id + "/view";
+          return session.getBaseUrl() + "/#file/" + obj.id + "/edit";
         },
         ajax: {
           url: session.getBaseUrl() + "/api/files/search",
