@@ -15,7 +15,8 @@ define([
     initialize: function() {
       this.listenTo(this.model, "change", this.render);
       Handlebars.registerHelper("markdown", function(content) {
-        return Markdown.toHTML(content);
+        // content can't be null or undefined
+        return Markdown.toHTML(content ? content : "");
       });
     },
 
