@@ -52,7 +52,6 @@ define([
       this.previewOn = true;
       // Turn off preview
       modalEl.one("hidden.bs.modal", _.bind(function() {
-        alert("off preview");
         this.previewOn = false;
       }, this));
     },
