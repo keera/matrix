@@ -18,8 +18,8 @@ define([
 
     initialize: function() {
       this.listenTo(this.collection, "reset", this.render);
-      this.listenTo(this.collection, "change", this.render);
-      this.listenTo(this.collection, "add", this.render);
+      this.listenTo(this.collection, "change", this.reRender);
+      this.listenTo(this.collection, "add", this.reRender);
       this.collection.fetch({reset: true});
       Handlebars.registerHelper("formatDatetime", function(datetime) {
         return moment(datetime).fromNow();
@@ -29,6 +29,7 @@ define([
       });
       // Keep updated
       setInterval(_.bind(this.collection.fetch, this.collection), 10000);
+      this.previewOn = false;
     },
 
     events: {
@@ -48,6 +49,12 @@ define([
           }).render().el
         );
       modalEl.modal("show");
+      this.previewOn = true;
+      // Turn off preview
+      modalEl.one("hidden.bs.modal", _.bind(function() {
+        alert("off preview");
+        this.previewOn = false;
+      }, this));
     },
 
     deleteFile: function(ev) {
@@ -70,6 +77,13 @@ define([
       this.collection
         .get(this.$(ev.target).data("id"))
         .togglePublish();
+    },
+
+    reRender: function() {
+      // Don't render while preview is on
+      if (!this.previewOn) {
+        this.render();
+      }
     },
 
     render: function() {
