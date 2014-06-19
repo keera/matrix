@@ -20,6 +20,7 @@ define([
       this.listenTo(this.collection, "reset", this.render);
       this.listenTo(this.collection, "change", this.reRender);
       this.listenTo(this.collection, "add", this.reRender);
+      this.listenTo(this.collection, "sort", this.reRender);
       this.collection.fetch({reset: true});
       Handlebars.registerHelper("formatDatetime", function(datetime) {
         return moment(datetime).fromNow();
@@ -35,7 +36,8 @@ define([
     events: {
       "click .delete-file": "deleteFile",
       "click .toggle-publish": "togglePublish",
-      "click .view-file": "viewFile"
+      "click .view-file": "viewFile",
+      "click .last-modified": "sortByDateModified"
     },
 
     viewFile: function(ev) {
@@ -76,6 +78,10 @@ define([
       this.collection
         .get(this.$(ev.target).data("id"))
         .togglePublish();
+    },
+
+    sortByDateModified: function() {
+      this.collection.sortByDateModified();
     },
 
     reRender: function() {

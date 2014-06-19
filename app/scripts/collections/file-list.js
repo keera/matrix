@@ -21,6 +21,20 @@ define([
     fetchByLabel: function(data) {
       this.url = session.getBaseUrl() + "/api/files?" + $.param(data);
       this.fetch({reset: true});
+    },
+
+    sortByDateModified: function() {
+      this.comparator = function(a, b) {
+        var dateA = Date.parse(a.get("date_modified"));
+        var dateB = Date.parse(b.get("date_modified"));
+        if (dateA < dateB) {
+          return 1;
+        } else if (dateA > dateB) {
+          return -1;
+        }
+        return 0;
+      }
+      this.sort();
     }
   });
 
