@@ -80,6 +80,7 @@ body {
   min-height: 50px;
   background-color: #000;
   padding: 10px;
+  z-index: 2;
 }
 
 #footer p {
