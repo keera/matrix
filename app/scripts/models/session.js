@@ -2,7 +2,9 @@ define([
   "backbone",
   "jquery"
 ], function(Backbone, $) {
+  // Session singleton
   var currSession = null;
+
   var Session = Backbone.Model.extend({
 
     isLoggedin: false,

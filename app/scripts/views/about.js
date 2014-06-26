@@ -25,10 +25,8 @@ define([
     },
 
     initialize: function() {
-      // TODO: should just be 1
-      this.signupValidation = new user();
-      this.loginValidation = new user();
-      this.signupValidation.setupValidation({
+      this.userValidation = new user();
+      this.userValidation.addRules("signup", {
         "username": {
           "rule": "not empty",
           "id": "signup-username-field"
@@ -38,7 +36,7 @@ define([
           "id": "signup-password-field"
         }
       });
-      this.loginValidation.setupValidation({
+      this.userValidation.addRules("login", {
         "username": {
           "rule": "not empty",
           "id": "login-username-field"
@@ -54,7 +52,7 @@ define([
       var username = this.$("#signup-modal .username").val();
       var password = this.$("#signup-modal .password").val();
       var notificationEl = this.$("#signup-notification");
-      if (this.signupValidation.isValid({
+      if (this.userValidation.isValid("signup", {
         "username": username,
         "password": password
       })) {
@@ -80,7 +78,7 @@ define([
       var username = this.$("#login-modal .username").val();
       var password = this.$("#login-modal .password").val();
       var notificationEl = this.$("#login-notification");
-      if (this.loginValidation.isValid({
+      if (this.userValidation.isValid("login", {
         "username": username,
         "password": password
       })) {
