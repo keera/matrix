@@ -270,7 +270,7 @@ define([
         wait: true,
       };
 
-      // First param a workaround for mousetrap combo arg
+      // First comparison a workaround for mousetrap combo arg
       if (typeof noAlert === "string" || !noAlert) {
         var successAlertEl = notificationEl.find(".alert-success");
         var errorAlertEl = notificationEl.find(".alert-danger");
