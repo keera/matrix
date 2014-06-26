@@ -3,14 +3,14 @@
 define([
   "backbone",
   "underscore",
-  "views/header",
+  "views/nav",
   "models/file",
   "models/session",
   "views/editor",
   "views/file",
   "views/dashboard",
   "views/about"
-], function(Backbone, _, headerView, fileModel, session,
+], function(Backbone, _, navView, fileModel, session,
   editorView, fileView, dashboardView, aboutView) {
 
   session = session.getSession();
@@ -32,7 +32,7 @@ define([
     main: function() {
       session.authenticate({
         success: function() {
-          (new headerView()).render("main");
+          (new navView()).render("main");
           (new dashboardView()).render();
         },
         failure: _.bind(function() {
@@ -44,7 +44,7 @@ define([
     view: function(id) {
       session.authenticate({
         success: function() {
-          (new headerView()).render("view");
+          (new navView()).render("view");
           (new fileView({model: new fileModel({id: id})}).render());
         },
         failure: _.bind(function() {
@@ -56,7 +56,7 @@ define([
     edit: function(id) {
       session.authenticate({
         success: function() {
-          (new headerView()).render("edit");
+          (new navView()).render("edit");
           (new editorView({model: new fileModel({id: id})}).render());
         },
         failure: _.bind(function() {
@@ -66,7 +66,7 @@ define([
     },
 
     about: function() {
-      (new headerView()).render("about");
+      (new navView()).render("about");
       (new aboutView()).render();
     }
   });
