@@ -7,7 +7,7 @@ define([
   "models/session",
   "models/user"
 ], function(Backbone, Handlebars, aboutTemplate, session,
-  user) {
+  userValidation) {
 
   session = session.getSession();
 
@@ -25,7 +25,7 @@ define([
     },
 
     initialize: function() {
-      this.userValidation = new user();
+      this.userValidation = new userValidation();
       this.userValidation.addRules("signup", {
         "username": {
           "rule": "not empty",
