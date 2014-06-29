@@ -13,6 +13,11 @@ define([
 
     url: session.getBaseUrl() + "/api/files/all",
 
+    initialize: function() {
+      // Set default sort
+      this.sortByDateModified();
+    },
+
     fetchAll: function() {
       this.url = session.getBaseUrl() + "/api/files/all"
       this.fetch({reset: true});
