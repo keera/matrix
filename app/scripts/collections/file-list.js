@@ -18,14 +18,24 @@ define([
       this.sortByDateModified();
     },
 
-    fetchAll: function() {
-      this.url = session.getBaseUrl() + "/api/files/all"
-      this.fetch({reset: true});
+    fetchAll: function(callback) {
+      this.url = session.getBaseUrl() + "/api/files/all";
+      this.fetch({
+        reset: true,
+        success: function() {
+          callback();
+        }
+      });
     },
 
-    fetchByLabel: function(data) {
+    fetchByLabel: function(data, callback) {
       this.url = session.getBaseUrl() + "/api/files?" + $.param(data);
-      this.fetch({reset: true});
+      this.fetch({
+        reset: true,
+        success: function() {
+          callback();
+        }
+      });
     },
 
     sortByDateModified: function() {
