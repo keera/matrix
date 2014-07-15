@@ -13,14 +13,43 @@ define([
 
     url: session.getBaseUrl() + "/api/files/all",
 
-    fetchAll: function() {
-      this.url = session.getBaseUrl() + "/api/files/all"
-      this.fetch({reset: true});
+    initialize: function() {
+      // Set default sort
+      this.sortByDateModified();
     },
 
-    fetchByLabel: function(data) {
+    fetchAll: function(callback) {
+      this.url = session.getBaseUrl() + "/api/files/all";
+      this.fetch({
+        reset: true,
+        success: function() {
+          callback();
+        }
+      });
+    },
+
+    fetchByLabel: function(data, callback) {
       this.url = session.getBaseUrl() + "/api/files?" + $.param(data);
-      this.fetch({reset: true});
+      this.fetch({
+        reset: true,
+        success: function() {
+          callback();
+        }
+      });
+    },
+
+    sortByDateModified: function() {
+      this.comparator = function(a, b) {
+        var dateA = Date.parse(a.get("date_modified"));
+        var dateB = Date.parse(b.get("date_modified"));
+        if (dateA < dateB) {
+          return 1;
+        } else if (dateA > dateB) {
+          return -1;
+        }
+        return 0;
+      }
+      this.sort();
     }
   });
 

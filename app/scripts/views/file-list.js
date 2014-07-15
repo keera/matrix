@@ -5,10 +5,12 @@ define([
   "underscore",
   "handlebars",
   "views/file",
+  "views/pagination",
   "text!templates/file-list-view.html",
   "moment"
-], function(Backbone, _, Handlebars, fileView,
-  filelistTemplate, moment) {
+], function(Backbone, _, Handlebars,
+  fileView, paginationView, filelistTemplate,
+  moment) {
 
   var Filelist = Backbone.View.extend({
 
@@ -20,6 +22,7 @@ define([
       this.listenTo(this.collection, "reset", this.render);
       this.listenTo(this.collection, "change", this.reRender);
       this.listenTo(this.collection, "add", this.reRender);
+      this.listenTo(this.collection, "pagination:update", this.reRender);
       this.collection.fetch({reset: true});
       Handlebars.registerHelper("formatDatetime", function(datetime) {
         return moment(datetime).fromNow();
@@ -27,6 +30,7 @@ define([
       Handlebars.registerHelper("hasFiles", function(files) {
         return (files.length > 0) ? true : false;
       });
+      this.pagination = new paginationView({collection: this.collection});
       // Keep updated
       setInterval(_.bind(this.collection.fetch, this.collection), 10000);
       this.previewOn = false;
@@ -87,13 +91,21 @@ define([
 
     render: function() {
       var models = this.collection.models;
-      var files = _.map(models, function(model) {
+
+      var files = (this.pagination) ?
+        this.pagination.getPageFiles() :
+        _.map(models, function(model) {
         return model.attributes;
       });
+
       this.$el.html(this.template({
         files: files,
         hasFiles: (files.length > 0) ? true : false
       }));
+
+      this.$("table").after(this.pagination.render().el);
+      // Redelegate b.c pagination el gets wiped
+      this.pagination.delegateEvents();
       this.$el.hide().fadeIn(300);
       return this;
     }
