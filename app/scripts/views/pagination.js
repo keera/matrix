@@ -12,24 +12,23 @@ define([
     template: Handlebars.compile(paginationView),
 
     initialize: function() {
-      Handlebars.registerHelper("createPageLinks", _.bind(function(numFiles) {
-        var filesPerPage = 10;
-        var numPages = Math.ceil(numFiles / filesPerPage);
+      this.limitPerPage = 10;
+      this.currPage = 1;
+      Handlebars.registerHelper("createPageLinks", _.bind(function() {
+        var numPages = this.getTotalPages();
         var pageLinks = "";
-        for (var currPage = 1; currPage <= numPages; currPage++) {
-          if (this.currPage == currPage) {
+        for (var page = 1; page <= numPages; page++) {
+          if (page == this.currPage) {
             pageLinks += '<li class="active">' +
               '<a class="page-num" href="#">' +
-              currPage + '</a></li>';
+              page + '</a></li>';
           } else {
             pageLinks += '<li><a class="page-num" href="#">' +
-              currPage + '</a></li>';
+              page + '</a></li>';
           }
         }
         return pageLinks;
       }, this));
-
-      this.currPage = 1;
     },
 
     events: {
@@ -38,34 +37,41 @@ define([
       "click .pagination .next-page": "nextPage"
     },
 
+    getTotalPages: function() {
+      return Math.ceil(this.collection.length / this.limitPerPage);
+    },
+
     gotoPage: function(e) {
       if (e) {
         e.preventDefault();
       }
       var link = this.$(e.target);
-      var currPage = this.currPage;
-      this.currPage = link.text();
+      this.currPage = parseInt(link.text(), 10);
       this.collection.trigger("pagination:update");
     },
 
     nextPage: function(e) {
-      this.currPage += 1;
+      if (e) {
+        e.preventDefault();
+      }
+      this.currPage += (this.currPage < this.getTotalPages()) ? 1 : 0;
       this.collection.trigger("pagination:update");
     },
 
     prevPage: function(e) {
-      this.currPage -= 1;
+      if (e) {
+        e.preventDefault();
+      }
+      this.currPage -= (this.currPage > 1) ? 1 : 0;
       this.collection.trigger("pagination:update");
     },
 
     getPageFiles: function() {
-      var begin = (this.currPage - 1) * 10;
-      var end = begin + 10;
-      var models = this.collection.slice(begin, end);
-      var files = _.map(models, function(model) {
+      var begin = (this.currPage - 1) * this.limitPerPage;
+      var end = begin + this.limitPerPage;
+      return _.map(this.collection.slice(begin, end), function(model) {
         return model.attributes;
       });
-      return files;
     },
 
     render: function() {
@@ -74,7 +80,6 @@ define([
       }));
       return this;
     }
-
   });
 
   return Pagination;
