@@ -1,4 +1,6 @@
 var express = require('express');
+var https = require('https');
+var fs = require('fs');
 var cookieParser = require('cookie-parser');
 var session = require("express-session");
 var file = require('./models/file');
@@ -7,6 +9,11 @@ var user = require('./models/user');
 var blog = require('./blog/blog');
 var mysql = require('mysql');
 var app = express();
+
+var options = {
+  key: fs.readFileSync('ssl-dir/matrix.key'),
+  cert: fs.readFileSync('ssl-dir/matrix.crt')
+};
 
 app.set('port', process.env.PORT || 3000);
 app.use(express.bodyParser());
@@ -90,4 +97,4 @@ app.get('/admin/api/labels', function(req, res) {
 });
 
 console.log("Listening to port: " + app.get('port'));
-app.listen(app.get('port'));
+https.createServer(options, app).listen(app.get('port'));
